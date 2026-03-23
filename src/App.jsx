@@ -1,64 +1,121 @@
-import logo from "./assets/logo.png"; 
-import heroImage from "./assets/hero.jpg";
-import product1 from "./assets/product1.jpg";
-import product2 from "./assets/product2.jpg";
-import product3 from "./assets/product3.jpg";
+// App.jsx
+import logo from "./assets/logo.png";
+import Navbar from "./components/navbar";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Bundles from "./pages/Bundles";
+import FrontalsClosures from "./pages/FrontalsClosures";
+import GluelessWigs from "./pages/GluelessWigs";
+import PartWigs from "./pages/PartWigs";
+import BraidingHair from "./pages/BraidingHair";
+import ClipIns from "./pages/ClipIns";
+import CollectionsSection from "./components/CollectionsSection";
+import HowItWorksSection from "./components/HowItWorksSection";
+import Footer from "./components/Footer";
+import { motion } from "framer-motion";
+import hero1 from "./assets/hero1.jpg";
+
+function Home() {
+  const fadeUp = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
+  };
+
+  return (
+    <div className="relative flex flex-col items-center overflow-hidden">
+
+      {/* HERO SECTION */}
+      <section className="relative w-full min-h-[600px] flex flex-col md:flex-row items-start justify-between px-6 md:px-20 pt-32 pb-20 overflow-hidden">
+        
+        {/* Hero Background Image */}
+        <motion.img
+          src={hero1}
+          alt="Hero Background"
+          className="absolute inset-0 w-full h-full object-cover -z-10"
+          initial={{ scale: 1 }}
+          animate={{ scale: 1.05 }}
+          transition={{ duration: 20, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }}
+        />
+        {/* Light overlay for readability */}
+        <div className="absolute inset-0 bg-black/10 -z-10 pointer-events-none"></div>
+
+        {/* HERO CONTENT */}
+        <motion.div
+          className="relative z-10 flex flex-col items-center md:items-start text-center md:text-left md:w-1/2"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={fadeUp}
+        >
+          <motion.img
+            src={logo}
+            alt="Silk & Sheen Logo"
+            className="w-32 md:w-40 mb-6"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8 }}
+          />
+
+          <motion.h1
+            className="text-5xl md:text-6xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500"
+            style={{ textShadow: '0 2px 6px rgba(0,0,0,0.6)' }}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.8 }}
+          >
+            SILK & SHEEN
+          </motion.h1>
+
+          <motion.p
+            className="text-white text-lg max-w-md mb-8"
+            style={{ textShadow: '0 2px 6px rgba(0,0,0,0.6)' }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.8 }}
+          >
+            Premium wigs crafted for elegance, confidence and timeless beauty.
+          </motion.p>
+
+          <motion.div
+            className="flex gap-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6, duration: 0.8 }}
+          >
+            <button className="bg-gold text-white px-8 py-3 rounded-md text-lg hover:bg-yellow-600 transition">
+              Shop Collection
+            </button>
+
+            <button className="border border-white text-white px-8 py-3 rounded-md text-lg hover:bg-white hover:text-black transition">
+              Learn More
+            </button>
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* BELOW HERO: DARK BACKGROUND SECTIONS */}
+      <div className="w-full bg-brandbg">
+        <CollectionsSection />
+        <HowItWorksSection />
+        <Footer />
+      </div>
+    </div>
+  );
+}
 
 function App() {
   return (
-    <div className="relative bg-brandbg min-h-screen flex flex-col items-center overflow-hidden">
-
-      {/* Background Gradient Circles */}
-      <div className="absolute top-[-100px] left-[-100px] w-72 h-72 bg-yellow-500 opacity-20 rounded-full animate-pulse"></div>
-      <div className="absolute bottom-[-80px] right-[-80px] w-96 h-96 bg-pink-500 opacity-20 rounded-full animate-pulse"></div>
-
-      {/* Hero Section */}
-      <div className="relative z-10 flex flex-col md:flex-row items-start justify-between w-full px-6 md:px-20 py-16">
-
-        {/* Left Column - lifted up */}
-        <div className="flex flex-col items-center md:items-start text-center md:text-left md:w-1/2 -translate-y-12 md:-translate-y-16 mb-10 md:mb-0 relative z-20">
-          <img src={logo} alt="Silk & Sheen Logo" className="w-32 md:w-40 mb-6" />
-          <h1 className="text-5xl md:text-6xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500">
-            SILK & SHEEN
-          </h1>
-          <p className="text-white text-lg max-w-md mb-6">
-            Premium wigs crafted for elegance, confidence and timeless beauty.
-          </p>
-          <div className="flex gap-4">
-            <button className="bg-gold text-white px-8 py-3 rounded-md text-lg hover:bg-yellow-600 transition transform hover:scale-105 shadow-md">
-              Shop Collection
-            </button>
-            <button className="border border-white text-white px-8 py-3 rounded-md text-lg hover:bg-white hover:text-brandbg transition">
-              Learn More
-            </button>
-          </div>
-        </div>
-
-        {/* Right Column - overlapping hero image */}
-        <div className="md:w-1/2 flex justify-center relative -mt-12 md:-mt-24">
-          <img
-            src={heroImage}
-            alt="Premium Wig Display"
-            className="w-full max-w-lg rounded-lg shadow-2xl transform hover:scale-105 transition duration-500"
-          />
-        </div>
-
-      </div>
-
-      {/* Teaser Product Cards */}
-      <div className="relative z-10 flex flex-wrap justify-center gap-6 px-6 md:px-20 pb-16">
-        {[product1, product2, product3].map((img, idx) => (
-          <div key={idx} className="bg-white rounded-lg shadow-lg w-60 hover:scale-105 transform transition">
-            <img src={img} alt={`Product ${idx + 1}`} className="rounded-t-lg w-full" />
-            <div className="p-4 text-center">
-              <h3 className="font-semibold text-lg">Product {idx + 1}</h3>
-              <p className="text-gray-500 mt-1">$99.99</p>
-            </div>
-          </div>
-        ))}
-      </div>
-      
-    </div>
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/bundles" element={<Bundles />} />
+        <Route path="/frontals-closures" element={<FrontalsClosures />} />
+        <Route path="/glueless-wigs" element={<GluelessWigs />} />
+        <Route path="/part-wigs" element={<PartWigs />} />
+        <Route path="/clip-ins" element={<ClipIns />} />
+        <Route path="/braiding-hair" element={<BraidingHair />} />
+      </Routes>
+    </Router>
   );
 }
 
