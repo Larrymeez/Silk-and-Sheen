@@ -3,32 +3,32 @@ import { Link } from "react-router-dom";
 const categories = [
   {
     name: "Bundles",
-    image: "/src/assets/category-bundles.jpg",
+    image: "/src/assets/bundles1.jpg",
     path: "/bundles",
   },
   {
     name: "Frontals & Closures",
-    image: "/src/assets/category-frontals.jpg",
+    image: "/src/assets/frontal1.jpg",
     path: "/frontals-closures",
   },
   {
     name: "Glueless Lace Wigs",
-    image: "/src/assets/category-glueless.jpg",
+    image: "/src/assets/glueless1.jpg",
     path: "/glueless-wigs",
   },
   {
     name: "Part Wigs",
-    image: "/src/assets/category-part.jpg",
+    image: "/src/assets/part3.jpg",
     path: "/part-wigs",
   },
   {
     name: "Clip-ins",
-    image: "/src/assets/category-clipins.jpg",
+    image: "/src/assets/clipins3.jpg",
     path: "/clip-ins",
   },
   {
     name: "Braiding Hair",
-    image: "/src/assets/category-braiding.jpg",
+    image: "/src/assets/braiding1.jpg",
     path: "/braiding-hair",
   },
 ];
@@ -64,14 +64,16 @@ function CollectionsSection() {
 
             {/* Overlay */}
             <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <h3 className="text-2xl font-semibold mb-3">{cat.name}</h3>
+              <h3 className="text-2xl font-semibold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500">
+                {cat.name}
+              </h3>
               <button className="bg-gold text-white px-6 py-2 rounded-md hover:bg-yellow-600 transition">
                 View More
               </button>
             </div>
 
             {/* Bottom Label */}
-            <div className="absolute bottom-4 left-4 text-white text-xl font-semibold drop-shadow-lg">
+            <div className="absolute bottom-4 left-4 text-xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 drop-shadow-lg">
               {cat.name}
             </div>
           </Link>
