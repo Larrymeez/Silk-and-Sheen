@@ -1,17 +1,16 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+module.exports = {
   content: [
     "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
+    "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
     extend: {
       colors: {
-        cream: "#F8F5F2",
-        gold: "#C6A75E",
-        brown: "#3E2C2C",
+        brandbg: "#1A1A1A",  // your page background
+        gold: "#D4AF37",      // your button color
       },
     },
   },
   plugins: [],
-}
+};
