@@ -1,6 +1,6 @@
-// src/components/HowItWorksSection.jsx
 import { FaShoppingBag, FaMagic, FaShippingFast, FaSmile } from "react-icons/fa";
-import hero3 from "../assets/hero3.jpg"; // Import the background image
+import { motion } from "framer-motion";
+import hero2 from "../assets/hero2.jpg";
 
 const steps = [
   {
@@ -26,11 +26,25 @@ const steps = [
 ];
 
 function HowItWorksSection() {
+  const containerVariants = {
+    hidden: {},
+    visible: { transition: { staggerChildren: 0.15 } },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+  };
+
   return (
-    <section
-      className="relative py-24 px-6 md:px-20 text-white"
+    <motion.section
+      className="relative py-24 px-6 md:px-20 text-white overflow-hidden"
+      variants={containerVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: false, amount: 0.2 }}
       style={{
-        backgroundImage: `url(${hero3})`,
+        backgroundImage: `url(${hero2})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
@@ -40,37 +54,32 @@ function HowItWorksSection() {
       <div className="absolute inset-0 bg-black bg-opacity-60 pointer-events-none"></div>
 
       <div className="relative z-10">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-semibold tracking-wide">
-            How It Works
-          </h2>
+        {/* Section Header */}
+        <motion.div variants={cardVariants} className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-semibold tracking-wide">How It Works</h2>
           <p className="text-gray-300 mt-3 max-w-xl mx-auto">
             A simple 4-step process to get the perfect wig delivered to you.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+        {/* Steps Grid */}
+        <motion.div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
           {steps.map((step, idx) => (
-            <div
+            <motion.div
               key={idx}
+              variants={cardVariants}
               className="bg-gray-900/40 backdrop-blur-md rounded-2xl p-8 flex flex-col items-center text-center hover:scale-105 transition-transform duration-500 shadow-lg"
             >
-              <div className="mb-6">
-                {step.icon}
-              </div>
-
+              <div className="mb-6">{step.icon}</div>
               <h3 className="text-xl md:text-2xl font-semibold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500">
                 {step.title}
               </h3>
-
-              <p className="text-gray-300">
-                {step.description}
-              </p>
-            </div>
+              <p className="text-gray-300">{step.description}</p>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 }
 

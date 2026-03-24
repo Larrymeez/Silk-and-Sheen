@@ -10,6 +10,9 @@ module.exports = {
         brandbg: "#1A1A1A",  // your page background
         gold: "#D4AF37",      // your button color
       },
+      fontFamily: {
+        calligraphy: ['"Dancing Script"', 'cursive'], // add calligraphy font
+      },
     },
   },
   plugins: [],
