@@ -8,11 +8,14 @@ import GluelessWigs from "./pages/GluelessWigs";
 import PartWigs from "./pages/PartWigs";
 import BraidingHair from "./pages/BraidingHair";
 import ClipIns from "./pages/ClipIns";
+import ProductPage from "./pages/ProductPage";
 import CollectionsSection from "./components/CollectionsSection";
 import HowItWorksSection from "./components/HowItWorksSection";
 import Footer from "./components/Footer";
 import { motion, AnimatePresence } from "framer-motion";
 import hero1 from "./assets/hero1.jpg";
+import { CartProvider } from "./context/CartContext.jsx";
+import SideDrawerCart from "./components/SideDrawerCart";
 
 function Home() {
   const [offsetY, setOffsetY] = useState(0);
@@ -171,8 +174,10 @@ function Home() {
 
 function App() {
   return (
+  <CartProvider>
     <Router>
       <Navbar />
+      <SideDrawerCart />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/bundles" element={<Bundles />} />
@@ -181,8 +186,14 @@ function App() {
         <Route path="/part-wigs" element={<PartWigs />} />
         <Route path="/clip-ins" element={<ClipIns />} />
         <Route path="/braiding-hair" element={<BraidingHair />} />
+        <Route path="/clip-ins" element={<ClipIns />} />
+        <Route path="/clip-ins/:id" element={<ProductPage />} />
+
+
       </Routes>
     </Router>
+  </CartProvider>
+    
   );
 }
 

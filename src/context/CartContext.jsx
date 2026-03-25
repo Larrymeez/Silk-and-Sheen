@@ -7,7 +7,6 @@ export function CartProvider({ children }) {
   const [cartItems, setCartItems] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
 
-  // Add product to cart
   const addToCart = (product, inches, quantity) => {
     setCartItems(prev => {
       const existing = prev.find(
@@ -23,15 +22,13 @@ export function CartProvider({ children }) {
         return [...prev, { ...product, inches, quantity }];
       }
     });
-    setIsOpen(true); // open drawer on add
+    setIsOpen(true);
   };
 
-  // Remove product
   const removeFromCart = (productId, inches) => {
     setCartItems(prev => prev.filter(item => !(item.id === productId && item.inches === inches)));
   };
 
-  // Update quantity
   const updateQuantity = (productId, inches, quantity) => {
     setCartItems(prev =>
       prev.map(item =>
@@ -42,22 +39,23 @@ export function CartProvider({ children }) {
     );
   };
 
-  // Total cart amount
   const totalAmount = cartItems.reduce(
     (sum, item) => sum + (item.basePrice + (item.inches - 14) * 300) * item.quantity,
     0
   );
 
   return (
-    <CartContext.Provider value={{
-      cartItems,
-      addToCart,
-      removeFromCart,
-      updateQuantity,
-      totalAmount,
-      isOpen,
-      setIsOpen
-    }}>
+    <CartContext.Provider
+      value={{
+        cartItems,
+        addToCart,
+        removeFromCart,
+        updateQuantity,
+        totalAmount,
+        isOpen,
+        setIsOpen
+      }}
+    >
       {children}
     </CartContext.Provider>
   );

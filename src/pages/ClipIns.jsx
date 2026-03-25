@@ -10,11 +10,11 @@ import clip5 from "../assets/clipins5.jpg";
 import clip6 from "../assets/clipins6.jpg";
 
 const products = [
-  { id: 1, name: "Silky Straight Clip-ins", basePrice: 4500, type: "Straight", image: clip1 },
-  { id: 2, name: "Body Wave Clip-ins", basePrice: 5000, type: "Wavy", image: clip2 },
-  { id: 3, name: "Curly Clip-ins", basePrice: 5200, type: "Curly", image: clip4 },
-  { id: 4, name: "Kinky Straight Clip-ins", basePrice: 4800, type: "Straight", image: clip5 },
-  { id: 5, name: "Luxury Volume Clip-ins", basePrice: 5500, type: "Wavy", image: clip6 },
+  { id: 1, name: "Brazilian Straight Clip-ins", basePrice: 12000, type: "Straight", image: clip1 },
+  { id: 2, name: "Brazilian Wavy Clip-ins", basePrice: 10000, type: "Wavy", image: clip2 },
+  { id: 3, name: "Peruvian Curly Clip-ins", basePrice: 12600, type: "Curly", image: clip4 },
+  { id: 4, name: "Brazilian Curly Clip-ins", basePrice: 11500, type: "Straight", image: clip5 },
+  { id: 5, name: "Malaysian Curly Clip-ins", basePrice: 10500, type: "Wavy", image: clip6 },
 ];
 
 function ClipIns() {
@@ -92,29 +92,29 @@ function ClipIns() {
             <motion.div
               key={product.id}
               variants={cardVariants}
-              className="group relative cursor-pointer bg-gray-900/60 backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition"
+              className="group cursor-pointer rounded-2xl overflow-hidden shadow-lg bg-gray-900/60 backdrop-blur-sm hover:shadow-2xl transition flex flex-col"
               onClick={() => navigate(`/clip-ins/${product.id}`)}
             >
               {/* Image */}
-              <div className="w-full aspect-[4/5] overflow-hidden">
-                <img
+              <motion.div className="w-full aspect-[4/5] overflow-hidden">
+                <motion.img
                   src={product.image}
                   alt={product.name}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="w-full h-full object-cover"
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.5 }}
                 />
-              </div>
+              </motion.div>
 
-              {/* Hover Overlay */}
-              <div className="absolute inset-0 bg-black bg-opacity-30 flex flex-col justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <h3 className="text-lg font-semibold text-yellow-400 mb-2">{product.name}</h3>
-                <p className="text-white mb-3">From KES {product.basePrice}</p>
-                <button className="bg-gold text-black px-4 py-2 rounded-full hover:bg-yellow-600 transition">
+              {/* Name & Select Button Below */}
+              <div className="px-4 py-4 flex flex-col gap-2 items-center">
+                <h3 className="text-lg font-semibold text-yellow-400 text-center">{product.name}</h3>
+                <button
+                  className="bg-gold text-black px-6 py-2 rounded-md hover:bg-yellow-600 transition"
+                >
                   Select
                 </button>
               </div>
-
-              {/* Bottom Label */}
-              <div className="absolute bottom-4 left-4 text-white font-semibold drop-shadow-lg">{product.name}</div>
             </motion.div>
           ))}
         </motion.div>

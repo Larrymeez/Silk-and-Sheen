@@ -2,10 +2,10 @@
 import { useContext } from "react";
 import { motion } from "framer-motion";
 import { CartContext } from "../context/CartContext";
-import { X } from "lucide-react"; // optional close icon
 
 export default function SideDrawerCart() {
-  const { cartItems, isOpen, setIsOpen, removeFromCart, updateQuantity, totalAmount } = useContext(CartContext);
+  const { cartItems, isOpen, setIsOpen, removeFromCart, updateQuantity, totalAmount } =
+    useContext(CartContext);
 
   return (
     <motion.div
@@ -17,8 +17,11 @@ export default function SideDrawerCart() {
       {/* Header */}
       <div className="flex justify-between items-center p-4 border-b border-gray-700">
         <h2 className="text-xl font-semibold">Your Cart</h2>
-        <button onClick={() => setIsOpen(false)}>
-          <X size={24} />
+        <button
+          onClick={() => setIsOpen(false)}
+          className="text-white text-2xl font-bold hover:text-gray-300 transition"
+        >
+          ×
         </button>
       </div>
 
@@ -27,30 +30,49 @@ export default function SideDrawerCart() {
         {cartItems.length === 0 ? (
           <p className="text-gray-400 text-center mt-10">Your cart is empty.</p>
         ) : (
-          cartItems.map(item => (
-            <div key={`${item.id}-${item.inches}`} className="flex gap-3 items-center bg-gray-800 p-3 rounded-lg">
-              <img src={item.image} alt={item.name} className="w-20 h-24 object-cover rounded-md" />
+          cartItems.map((item) => (
+            <div
+              key={`${item.id}-${item.inches}`}
+              className="flex gap-3 items-center bg-gray-800 p-3 rounded-lg"
+            >
+              <img
+                src={item.image}
+                alt={item.name}
+                className="w-20 h-24 object-cover rounded-md"
+              />
               <div className="flex-1 flex flex-col">
                 <h3 className="font-semibold">{item.name}</h3>
                 <p className="text-sm text-gray-300">{item.inches}" Length</p>
-                <p className="text-sm text-gray-300">KES {(item.basePrice + (item.inches - 14) * 300) * item.quantity}</p>
+                <p className="text-sm text-gray-300">
+                  KES {(item.basePrice + (item.inches - 14) * 300) * item.quantity}
+                </p>
 
                 {/* Quantity Controls */}
                 <div className="flex gap-2 mt-2">
                   <button
-                    onClick={() => updateQuantity(item.id, item.inches, item.quantity - 1)}
+                    onClick={() =>
+                      updateQuantity(item.id, item.inches, item.quantity - 1)
+                    }
                     disabled={item.quantity <= 1}
-                    className="bg-gray-700 px-2 rounded"
-                  >-</button>
+                    className="bg-gray-700 px-2 rounded disabled:opacity-50"
+                  >
+                    -
+                  </button>
                   <span className="px-2">{item.quantity}</span>
                   <button
-                    onClick={() => updateQuantity(item.id, item.inches, item.quantity + 1)}
+                    onClick={() =>
+                      updateQuantity(item.id, item.inches, item.quantity + 1)
+                    }
                     className="bg-gray-700 px-2 rounded"
-                  >+</button>
+                  >
+                    +
+                  </button>
                   <button
                     onClick={() => removeFromCart(item.id, item.inches)}
                     className="ml-auto text-red-400 hover:text-red-600 text-sm"
-                  >Remove</button>
+                  >
+                    Remove
+                  </button>
                 </div>
               </div>
             </div>

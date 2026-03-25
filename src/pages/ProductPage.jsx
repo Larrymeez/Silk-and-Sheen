@@ -1,6 +1,7 @@
-// src/pages/ProductPage.jsx
 import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
+import { motion } from "framer-motion";
+import { CartContext } from "../context/CartContext.jsx"; // <-- Import context
 import clip1 from "../assets/clipins1.jpg";
 import clip2 from "../assets/clipins2.jpg";
 import clip4 from "../assets/clipins4.jpg";
@@ -8,11 +9,11 @@ import clip5 from "../assets/clipins5.jpg";
 import clip6 from "../assets/clipins6.jpg";
 
 const products = [
-  { id: 1, name: "Silky Straight Clip-ins", basePrice: 4500, image: clip1 },
-  { id: 2, name: "Body Wave Clip-ins", basePrice: 5000, image: clip2 },
-  { id: 3, name: "Curly Clip-ins", basePrice: 5200, image: clip4 },
-  { id: 4, name: "Kinky Straight Clip-ins", basePrice: 4800, image: clip5 },
-  { id: 5, name: "Luxury Volume Clip-ins", basePrice: 5500, image: clip6 },
+  { id: 1, name: "Brazilian Straight Clip-ins", basePrice: 12000, image: clip1 },
+  { id: 2, name: "Brazilian Wavy Clip-ins", basePrice: 10000, image: clip2 },
+  { id: 3, name: "Peruvian Curly Clip-ins", basePrice: 12600, image: clip4 },
+  { id: 4, name: "Brazilian Curly Clip-ins", basePrice: 11500, image: clip5 },
+  { id: 5, name: "Malaysian Curly Clip-ins", basePrice: 10500, image: clip6 },
 ];
 
 function ProductPage() {
@@ -21,30 +22,70 @@ function ProductPage() {
 
   const [inches, setInches] = useState(14);
   const [quantity, setQuantity] = useState(1);
+  const [offsetY, setOffsetY] = useState(0);
+  const [zoom, setZoom] = useState(1);
 
-  const price = product.basePrice + (inches - 14) * 300; // extra 300 per inch over 14
+  const { addToCart } = useContext(CartContext); // <-- Use CartContext
 
-  const handleAddToCart = () => {
-    alert(`Added ${quantity} x ${product.name} (${inches}" length) to cart. Total: KES ${price * quantity}`);
-  };
+  // Scroll tracking
+  useEffect(() => {
+    const handleScroll = () => setOffsetY(window.scrollY);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Slow zoom in/out effect
+  useEffect(() => {
+    let scale = 1;
+    let direction = 1;
+    const interval = setInterval(() => {
+      scale += 0.0005 * direction;
+      if (scale > 1.03 || scale < 1) direction *= -1;
+      setZoom(scale);
+    }, 16);
+    return () => clearInterval(interval);
+  }, []);
+
+  const price = product.basePrice + (inches - 14) * 300; // 300 per extra inch
 
   return (
-    <div className="px-6 md:px-20 py-16 bg-brandbg text-white flex flex-col md:flex-row gap-10">
+    <motion.div
+      className="px-6 md:px-20 py-16 bg-brandbg text-white flex flex-col md:flex-row gap-10"
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8 }}
+    >
       {/* Product Image */}
-      <div className="md:w-1/2">
-        <img src={product.image} alt={product.name} className="w-full rounded-2xl shadow-xl" />
-      </div>
+      <motion.div
+        className="md:w-1/2 relative rounded-2xl overflow-hidden shadow-xl"
+        style={{ transform: `translateY(${offsetY * 0.05}px)` }}
+      >
+        <motion.img
+          src={product.image}
+          alt={product.name}
+          className="w-full h-full object-cover rounded-2xl"
+          initial={{ scale: 0.95 }}
+          animate={{ scale: zoom }}
+          transition={{ duration: 20, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent rounded-2xl" />
+      </motion.div>
 
       {/* Product Details */}
-      <div className="md:w-1/2 flex flex-col gap-6">
-        <h1 className="text-4xl font-bold">{product.name}</h1>
+      <motion.div
+        className="md:w-1/2 flex flex-col gap-6"
+        initial={{ opacity: 0, x: 50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.8 }}
+      >
+        <h1 className="text-4xl md:text-5xl font-bold">{product.name}</h1>
         <p className="text-gray-300">
           Select the desired length in inches. Price increases with longer lengths.
         </p>
 
-        {/* Inches selector */}
+        {/* Inches Slider */}
         <div className="flex flex-col gap-2">
-          <label>Length (inches): {inches}"</label>
+          <label className="font-semibold">Length (inches): {inches}"</label>
           <input
             type="range"
             min={14}
@@ -55,9 +96,9 @@ function ProductPage() {
           />
         </div>
 
-        {/* Quantity selector */}
+        {/* Quantity Input */}
         <div className="flex flex-col gap-2">
-          <label>Quantity:</label>
+          <label className="font-semibold">Quantity:</label>
           <input
             type="number"
             min={1}
@@ -68,18 +109,18 @@ function ProductPage() {
         </div>
 
         {/* Total Price */}
-        <p className="text-xl font-semibold">
+        <p className="text-xl md:text-2xl font-semibold">
           Total: KES {price * quantity}
         </p>
 
         <button
-          onClick={handleAddToCart}
+          onClick={() => addToCart(product, inches, quantity)} // <-- Add to cart via context
           className="bg-gold text-black px-6 py-3 rounded-md hover:bg-yellow-600 transition w-max"
         >
           Add to Cart
         </button>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 
