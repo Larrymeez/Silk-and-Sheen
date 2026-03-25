@@ -1,237 +1,125 @@
-import { useState } from "react";
+// src/pages/ClipIns.jsx
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import hero3 from "../assets/hero3.jpg";
+import clip1 from "../assets/clipins1.jpg";
+import clip2 from "../assets/clipins2.jpg";
+import clip4 from "../assets/clipins4.jpg";
+import clip5 from "../assets/clipins5.jpg";
+import clip6 from "../assets/clipins6.jpg";
 
 const products = [
-  { id: 1, name: "Silky Straight Clip-ins", price: 4500, type: "Straight", length: "Long", image: "/src/assets/clipins1.jpg" },
-  { id: 2, name: "Body Wave Clip-ins", price: 5000, type: "Wavy", length: "Medium", image: "/src/assets/clipins2.jpg" },
-  { id: 3, name: "Curly Clip-ins", price: 5200, type: "Curly", length: "Long", image: "/src/assets/clipins3.jpg" },
-  { id: 4, name: "Kinky Straight Clip-ins", price: 4800, type: "Straight", length: "Short", image: "/src/assets/clipins4.jpg" },
+  { id: 1, name: "Silky Straight Clip-ins", basePrice: 4500, type: "Straight", image: clip1 },
+  { id: 2, name: "Body Wave Clip-ins", basePrice: 5000, type: "Wavy", image: clip2 },
+  { id: 3, name: "Curly Clip-ins", basePrice: 5200, type: "Curly", image: clip4 },
+  { id: 4, name: "Kinky Straight Clip-ins", basePrice: 4800, type: "Straight", image: clip5 },
+  { id: 5, name: "Luxury Volume Clip-ins", basePrice: 5500, type: "Wavy", image: clip6 },
 ];
 
 function ClipIns() {
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [quantity, setQuantity] = useState(1);
+  const navigate = useNavigate();
+  const [zoom, setZoom] = useState(1);
 
-  const [selectedType, setSelectedType] = useState("All");
-  const [selectedLength, setSelectedLength] = useState("All");
-  const [maxPrice, setMaxPrice] = useState(6000);
-  const [showFilters, setShowFilters] = useState(false);
+  // slow background zoom (hero image)
+  useEffect(() => {
+    let scale = 1;
+    let direction = 1;
+    const interval = setInterval(() => {
+      scale += 0.0005 * direction;
+      if (scale > 1.05 || scale < 1) direction *= -1;
+      setZoom(scale);
+    }, 16);
+    return () => clearInterval(interval);
+  }, []);
 
-  const filteredProducts = products.filter((p) => {
-    return (
-      (selectedType === "All" || p.type === selectedType) &&
-      (selectedLength === "All" || p.length === selectedLength) &&
-      p.price <= maxPrice
-    );
-  });
-
-  const totalPrice = selectedProduct
-    ? selectedProduct.price * quantity
-    : 0;
-
-  // Animations
-  const container = {
-    hidden: {},
-    show: { transition: { staggerChildren: 0.2 } },
-  };
-
-  const fadeLeft = {
-    hidden: { opacity: 0, x: -60 },
-    show: { opacity: 1, x: 0, transition: { duration: 0.8 } },
-  };
-
-  const fadeUp = {
-    hidden: { opacity: 0, y: 40 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.7 } },
-  };
+  const containerVariants = { hidden: {}, show: { transition: { staggerChildren: 0.1 } } };
+  const cardVariants = { hidden: { opacity: 0, y: 30 }, show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } } };
 
   return (
-    <div className="min-h-screen bg-brandbg text-white px-6 md:px-20 py-20">
-
-      {/* 🔥 HERO HEADER (LEFT ALIGNED) */}
+    <motion.div
+      className="relative flex flex-col md:flex-row items-start md:items-start px-6 md:px-20 py-16 bg-brandbg text-white"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.8 }}
+    >
+      {/* LEFT SIDE: Hero Text */}
       <motion.div
-        variants={container}
-        initial="hidden"
-        animate="show"
-        className="grid md:grid-cols-2 gap-12 items-center mb-20"
+        className="md:w-1/3 flex flex-col gap-10"
+        initial={{ opacity: 0, x: -50 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 1 }}
       >
-        {/* LEFT TEXT */}
-        <div>
-          <motion.h1
-            variants={fadeLeft}
-            className="text-4xl md:text-5xl font-extrabold mb-4"
-          >
+        <div className="space-y-4">
+          <h1 className="text-5xl md:text-6xl font-bold italic tracking-wide text-yellow-400">
             Silk & Sheen Clip-Ins
-          </motion.h1>
-
-          <motion.p
-            variants={fadeLeft}
-            className="text-2xl md:text-3xl font-calligraphy italic text-yellow-300 mb-6"
-            style={{ textShadow: "0 4px 12px rgba(0,0,0,0.6)" }}
-          >
+          </h1>
+          <p className="text-gray-300 font-calligraphy text-lg md:text-xl">
             Effortless elegance. Instant confidence.
-          </motion.p>
-
-          <motion.p
-            variants={fadeLeft}
-            className="text-gray-300 text-lg leading-relaxed mb-4"
-          >
-            Our 100% human hair clip-ins are crafted to give you seamless length, natural volume,
-            and unmatched versatility in minutes — no salon needed. Whether sleek, wavy, or full-bodied curls,
-            each set blends flawlessly and moves like your own.
-          </motion.p>
-
-          <motion.p
-            variants={fadeLeft}
-            className="text-lg font-semibold text-gray-200"
-          >
+            <br />
+            Our 100% human hair clip-ins are crafted to give you seamless length, natural volume, and unmatched versatility in minutes — no salon needed. Whether sleek, wavy, or full-bodied curls, each set blends flawlessly and moves like your own.
+            <br />
             Clip in. Step out. Own every moment.
-          </motion.p>
+          </p>
         </div>
-
-        {/* RIGHT SIDE IMAGE */}
-        <motion.div
-          variants={fadeUp}
-          className="hidden md:block relative h-[400px] rounded-2xl overflow-hidden shadow-xl"
-        >
-          <motion.img
-            src="/src/assets/hero3.jpg"
-            alt="Clip-ins model"
-            className="w-full h-full object-cover"
-            initial={{ scale: 1 }}
-            animate={{ scale: 1.05 }}
-            transition={{
-              duration: 20,
-              repeat: Infinity,
-              repeatType: "reverse",
-              ease: "easeInOut",
-            }}
-          />
-
-          {/* Soft overlay for luxury feel */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-        </motion.div>
       </motion.div>
 
-      {/* FILTER BUTTON (MOBILE) */}
-      <button
-        onClick={() => setShowFilters(!showFilters)}
-        className="mb-6 md:hidden bg-gold px-4 py-2 rounded"
-      >
-        Filters
-      </button>
-
-      <div className="flex gap-10">
-
-        {/* FILTER SIDEBAR */}
-        <motion.div
-          initial={{ opacity: 0, x: -30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          className={`w-full md:w-1/4 bg-gray-900 p-6 rounded-xl ${showFilters ? "block" : "hidden md:block"}`}
-        >
-          <h3 className="text-xl font-semibold mb-4">Filter</h3>
-
-          <div className="mb-6">
-            <p className="mb-2">Type</p>
-            {["All", "Straight", "Wavy", "Curly"].map((type) => (
-              <button
-                key={type}
-                onClick={() => setSelectedType(type)}
-                className={`block mb-2 ${selectedType === type ? "text-gold" : ""}`}
-              >
-                {type}
-              </button>
-            ))}
-          </div>
-
-          <div className="mb-6">
-            <p className="mb-2">Length</p>
-            {["All", "Short", "Medium", "Long"].map((len) => (
-              <button
-                key={len}
-                onClick={() => setSelectedLength(len)}
-                className={`block mb-2 ${selectedLength === len ? "text-gold" : ""}`}
-              >
-                {len}
-              </button>
-            ))}
-          </div>
-
-          <div>
-            <p className="mb-2">Max Price: KES {maxPrice}</p>
-            <input
-              type="range"
-              min="3000"
-              max="6000"
-              value={maxPrice}
-              onChange={(e) => setMaxPrice(e.target.value)}
-              className="w-full"
-            />
-          </div>
+      {/* RIGHT SIDE: Hero image + Products */}
+      <motion.div className="md:w-2/3 mt-10 md:mt-0 flex flex-col gap-10">
+        {/* Hero Image */}
+        <motion.div className="relative h-80 md:h-96 rounded-2xl overflow-hidden shadow-xl">
+          <motion.img
+            src={hero3}
+            alt="Clip-ins hero"
+            className="w-full h-full object-cover"
+            initial={{ scale: 1 }}
+            animate={{ scale: zoom }}
+            transition={{ duration: 20, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
         </motion.div>
 
-        {/* PRODUCTS */}
+        {/* Products Grid */}
         <motion.div
-          variants={container}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+          variants={containerVariants}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: false, amount: 0.2 }}
-          className="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+          viewport={{ once: true, amount: 0.2 }}
         >
-          {filteredProducts.map((product) => (
+          {products.map(product => (
             <motion.div
               key={product.id}
-              variants={fadeUp}
-              whileHover={{ scale: 1.05 }}
-              onClick={() => setSelectedProduct(product)}
-              className="cursor-pointer bg-gray-900 rounded-2xl overflow-hidden shadow-lg"
+              variants={cardVariants}
+              className="group relative cursor-pointer bg-gray-900/60 backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition"
+              onClick={() => navigate(`/clip-ins/${product.id}`)}
             >
-              <img
-                src={product.image}
-                className="w-full h-[250px] object-cover"
-              />
-
-              <div className="p-4 text-center">
-                <h3 className="text-lg font-semibold">{product.name}</h3>
-                <p className="text-gold font-bold">KES {product.price}</p>
+              {/* Image */}
+              <div className="w-full aspect-[4/5] overflow-hidden">
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
               </div>
+
+              {/* Hover Overlay */}
+              <div className="absolute inset-0 bg-black bg-opacity-30 flex flex-col justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <h3 className="text-lg font-semibold text-yellow-400 mb-2">{product.name}</h3>
+                <p className="text-white mb-3">From KES {product.basePrice}</p>
+                <button className="bg-gold text-black px-4 py-2 rounded-full hover:bg-yellow-600 transition">
+                  Select
+                </button>
+              </div>
+
+              {/* Bottom Label */}
+              <div className="absolute bottom-4 left-4 text-white font-semibold drop-shadow-lg">{product.name}</div>
             </motion.div>
           ))}
         </motion.div>
-      </div>
-
-      {/* MODAL */}
-      {selectedProduct && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="bg-white text-black p-6 rounded-xl w-[90%] max-w-md"
-          >
-            <h2 className="text-xl font-bold">{selectedProduct.name}</h2>
-
-            <p className="mt-2">KES {selectedProduct.price}</p>
-
-            <div className="flex gap-4 my-4">
-              <button onClick={() => setQuantity(q => Math.max(1, q - 1))}>-</button>
-              <span>{quantity}</span>
-              <button onClick={() => setQuantity(q => q + 1)}>+</button>
-            </div>
-
-            <p>Total: KES {totalPrice}</p>
-
-            <div className="flex gap-4 mt-4">
-              <button className="bg-gold text-white px-4 py-2 rounded">
-                Add to Cart
-              </button>
-              <button onClick={() => setSelectedProduct(null)}>
-                Cancel
-              </button>
-            </div>
-          </motion.div>
-        </div>
-      )}
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 
