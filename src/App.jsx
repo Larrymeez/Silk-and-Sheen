@@ -19,10 +19,10 @@ function Home() {
   const [letterIndex, setLetterIndex] = useState(0);
   const collectionsRef = useRef(null);
 
-  const words = ["Elegance", "Confidence", "Beauty"];
+  const words = ["in Every strand", , "Confidence"];
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
 
-  const fullText = "SILK & SHEEN";
+  const fullText = "SILK & SHEEN ";
 
   const smoothEase = [0.25, 0.8, 0.25, 1];
 
@@ -31,23 +31,18 @@ function Home() {
     show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: smoothEase } },
   };
 
-  const staggerContainer = {
-    hidden: {},
-    show: { transition: { staggerChildren: 0.08 } },
-  };
-
-  // Parallax scroll
+  // Scroll tracking
   useEffect(() => {
     const handleScroll = () => setOffsetY(window.scrollY);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Smooth typewriter effect
+  // Typewriter
   useEffect(() => {
     const interval = setInterval(() => {
       setLetterIndex(prev => (prev + 1 > fullText.length ? 0 : prev + 1));
-    }, 400); // slower, smooth typing
+    }, 400);
     return () => clearInterval(interval);
   }, []);
 
@@ -73,7 +68,7 @@ function Home() {
       {/* HERO */}
       <section className="relative w-full min-h-[600px] flex flex-col md:flex-row items-start justify-between px-6 md:px-20 pt-32 pb-20 overflow-hidden">
 
-        {/* Hero image with zoom + parallax */}
+        {/* Background */}
         <motion.img
           src={hero1}
           alt="Hero Background"
@@ -83,52 +78,64 @@ function Home() {
           style={{ transform: `translateY(${offsetY * 0.25}px)` }}
         />
 
-        {/* Gradient overlays */}
+        {/* Overlays */}
         <div className="absolute inset-0 -z-10 bg-gradient-to-r from-black/70 via-black/20 to-black/70" />
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.2)_0%,rgba(0,0,0,0.8)_100%)]" />
-        <div className="absolute inset-0 -z-10 bg-[linear-gradient(120deg,transparent,rgba(255,255,255,0.08),transparent)] animate-[shimmer_8s_linear_infinite]" />
 
-        {/* HERO CONTENT */}
+        {/* CONTENT */}
         <motion.div
           className="relative z-10 flex flex-col items-center md:items-start text-center md:text-left md:w-1/2"
           variants={sectionFade}
           initial="hidden"
           animate="show"
         >
+          {/* ✅ SHARP + BIGGER LOGO */}
           <motion.img
             src={logo}
             alt="Logo"
-            className="w-32 md:w-40 mb-6"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
+            className="w-40 md:w-48 mb-6 object-contain"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ duration: 0.8 }}
+            style={{
+              filter: "drop-shadow(0 4px 12px rgba(0,0,0,0.6))",
+            }}
           />
 
-          {/* SILK & SHEEN with smooth typewriter + gradient */}
+          {/* TYPEWRITER TITLE */}
           <motion.h1
-            className="text-5xl md:text-6xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 animate-gradient"
+            className="text-5xl md:text-6xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500"
             style={{ textShadow: "0 2px 6px rgba(0,0,0,0.6)" }}
           >
             {fullText.slice(0, letterIndex)}
             <span className="inline-block w-1 h-8 bg-white animate-blink ml-1"></span>
           </motion.h1>
 
-          {/* Rotating tagline */}
-          <div className="h-8 mb-4">
+          {/* ✅ SCROLL + ANIMATED CALLIGRAPHY TAGLINE */}
+          <motion.div
+            className="h-10 mb-6 flex items-center justify-center md:justify-start"
+            style={{
+              transform: `translateY(${offsetY * 0.1}px)`,
+            }}
+          >
             <AnimatePresence mode="wait">
               <motion.span
                 key={words[currentWordIndex]}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.5 }}
-                className="text-xl text-yellow-300 font-semibold"
+                initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 1.05, y: -10 }}
+                transition={{ duration: 0.6, ease: "easeInOut" }}
+                className="text-2xl md:text-3xl font-calligraphy italic font-semibold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 via-pink-400 to-purple-400"
+                style={{
+                  textShadow: "0 4px 12px rgba(0,0,0,0.6)",
+                }}
               >
                 {words[currentWordIndex]}
               </motion.span>
             </AnimatePresence>
-          </div>
+          </motion.div>
 
+          {/* DESCRIPTION */}
           <motion.p
             className="text-white text-lg max-w-md mb-8"
             style={{ textShadow: "0 2px 6px rgba(0,0,0,0.6)" }}
@@ -136,6 +143,7 @@ function Home() {
             Premium wigs crafted for elegance, confidence and timeless beauty.
           </motion.p>
 
+          {/* BUTTONS */}
           <motion.div className="flex gap-4">
             <button
               onClick={scrollToCollections}
@@ -143,6 +151,7 @@ function Home() {
             >
               Shop Collection
             </button>
+
             <button className="border border-white text-white px-8 py-3 rounded-md text-lg hover:bg-white hover:text-black transition transform hover:scale-105">
               Learn More
             </button>
@@ -150,17 +159,11 @@ function Home() {
         </motion.div>
       </section>
 
-      {/* BELOW HERO SECTIONS */}
+      {/* BELOW HERO */}
       <div ref={collectionsRef} className="w-full bg-brandbg">
-        <motion.div variants={staggerContainer} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }}>
-          <motion.div variants={sectionFade}><CollectionsSection /></motion.div>
-        </motion.div>
-        <motion.div variants={sectionFade} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }}>
-          <HowItWorksSection />
-        </motion.div>
-        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 0.8 }} viewport={{ once: true }}>
-          <Footer />
-        </motion.div>
+        <CollectionsSection />
+        <HowItWorksSection />
+        <Footer />
       </div>
     </motion.div>
   );
