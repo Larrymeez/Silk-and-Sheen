@@ -1,24 +1,39 @@
+// src/components/CollectionsSection.jsx
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
+
+import bundles1 from "../assets/bundles1.jpg";
+import frontal1 from "../assets/frontal1.jpg";
+import glueless1 from "../assets/glueless1.jpg";
+import part3 from "../assets/part3.jpg";
+import clipins3 from "../assets/clipins3.jpg";
+import braiding1 from "../assets/braiding1.jpg";
+
 const categories = [
-  { name: "Bundles", image: "/src/assets/bundles1.jpg", path: "/bundles" },
-  { name: "Frontals & Closures", image: "/src/assets/frontal1.jpg", path: "/frontals-closures" },
-  { name: "Glueless Lace Wigs", image: "/src/assets/glueless1.jpg", path: "/glueless-wigs" },
-  { name: "Part Wigs", image: "/src/assets/part3.jpg", path: "/part-wigs" },
-  { name: "Clip-ins", image: "/src/assets/clipins3.jpg", path: "/clip-ins" },
-  { name: "Braiding Hair", image: "/src/assets/braiding1.jpg", path: "/braiding-hair" },
+  { name: "Bundles", image: bundles1, path: "/bundles" },
+  { name: "Frontals & Closures", image: frontal1, path: "/frontals-closures" },
+  { name: "Glueless Lace Wigs", image: glueless1, path: "/glueless-wigs" },
+  { name: "Part Wigs", image: part3, path: "/part-wigs" },
+  { name: "Clip-ins", image: clipins3, path: "/clip-ins" },
+  { name: "Braiding Hair", image: braiding1, path: "/braiding-hair" },
 ];
 
 function CollectionsSection() {
   const containerVariants = {
     hidden: {},
-    visible: { transition: { staggerChildren: 0.2 } },
+    visible: {
+      transition: { staggerChildren: 0.2 },
+    },
   };
 
   const itemVariants = {
     hidden: { opacity: 0, y: 40 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.8, ease: "easeOut" },
+    },
   };
 
   return (
