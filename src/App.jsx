@@ -22,7 +22,8 @@ function Home() {
   const [letterIndex, setLetterIndex] = useState(0);
   const collectionsRef = useRef(null);
 
-  const words = ["in Every strand", , "Confidence"];
+  // ✅ FIXED (removed empty value)
+  const words = ["in Every strand", "Confidence"];
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
 
   const fullText = "SILK & SHEEN ";
@@ -92,7 +93,7 @@ function Home() {
           initial="hidden"
           animate="show"
         >
-          {/* ✅ SHARP + BIGGER LOGO */}
+          {/* Logo */}
           <motion.img
             src={logo}
             alt="Logo"
@@ -105,21 +106,24 @@ function Home() {
             }}
           />
 
-          {/* TYPEWRITER TITLE */}
+          {/* ✨ IMPROVED TYPEWRITER */}
           <motion.h1
-            className="text-5xl md:text-6xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500"
-            style={{ textShadow: "0 2px 6px rgba(0,0,0,0.6)" }}
+            className="text-5xl md:text-6xl mb-4 text-white font-calligraphy italic tracking-wide"
+            style={{
+              textShadow: "0 4px 12px rgba(0,0,0,0.6)",
+              letterSpacing: "0.08em",
+            }}
           >
             {fullText.slice(0, letterIndex)}
-            <span className="inline-block w-1 h-8 bg-white animate-blink ml-1"></span>
+
+            {/* Softer cursor */}
+            <span className="inline-block ml-1 opacity-70 animate-pulse">|</span>
           </motion.h1>
 
-          {/* ✅ SCROLL + ANIMATED CALLIGRAPHY TAGLINE */}
+          {/* Tagline */}
           <motion.div
             className="h-10 mb-6 flex items-center justify-center md:justify-start"
-            style={{
-              transform: `translateY(${offsetY * 0.1}px)`,
-            }}
+            style={{ transform: `translateY(${offsetY * 0.1}px)` }}
           >
             <AnimatePresence mode="wait">
               <motion.span
@@ -128,7 +132,7 @@ function Home() {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 1.05, y: -10 }}
                 transition={{ duration: 0.6, ease: "easeInOut" }}
-                className="text-2xl md:text-3xl font-calligraphy italic font-semibold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 via-pink-400 to-purple-400"
+                className="text-2xl md:text-3xl font-calligraphy italic font-semibold text-white"
                 style={{
                   textShadow: "0 4px 12px rgba(0,0,0,0.6)",
                 }}
@@ -138,7 +142,7 @@ function Home() {
             </AnimatePresence>
           </motion.div>
 
-          {/* DESCRIPTION */}
+          {/* Description */}
           <motion.p
             className="text-white text-lg max-w-md mb-8"
             style={{ textShadow: "0 2px 6px rgba(0,0,0,0.6)" }}
@@ -146,7 +150,7 @@ function Home() {
             Premium wigs crafted for elegance, confidence and timeless beauty.
           </motion.p>
 
-          {/* BUTTONS */}
+          {/* Buttons */}
           <motion.div className="flex gap-4">
             <button
               onClick={scrollToCollections}
@@ -174,26 +178,22 @@ function Home() {
 
 function App() {
   return (
-  <CartProvider>
-    <Router>
-      <Navbar />
-      <SideDrawerCart />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/bundles" element={<Bundles />} />
-        <Route path="/frontals-closures" element={<FrontalsClosures />} />
-        <Route path="/glueless-wigs" element={<GluelessWigs />} />
-        <Route path="/part-wigs" element={<PartWigs />} />
-        <Route path="/clip-ins" element={<ClipIns />} />
-        <Route path="/braiding-hair" element={<BraidingHair />} />
-        <Route path="/clip-ins" element={<ClipIns />} />
-        <Route path="/clip-ins/:id" element={<ProductPage />} />
-
-
-      </Routes>
-    </Router>
-  </CartProvider>
-    
+    <CartProvider>
+      <Router>
+        <Navbar />
+        <SideDrawerCart />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/bundles" element={<Bundles />} />
+          <Route path="/frontals-closures" element={<FrontalsClosures />} />
+          <Route path="/glueless-wigs" element={<GluelessWigs />} />
+          <Route path="/part-wigs" element={<PartWigs />} />
+          <Route path="/clip-ins" element={<ClipIns />} />
+          <Route path="/braiding-hair" element={<BraidingHair />} />
+          <Route path="/clip-ins/:id" element={<ProductPage />} />
+        </Routes>
+      </Router>
+    </CartProvider>
   );
 }
 
