@@ -52,47 +52,46 @@ function OrderPage() {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const orderData = {
-    customer_name: formData.name,
-    customer_email: formData.email,
-    customer_phone: formData.phone,
-    delivery_location: formData.location,
-    notes: formData.notes,
+    const orderData = {
+      customer_name: formData.name,
+      customer_email: formData.email,
+      customer_phone: formData.phone,
+      delivery_location: formData.location,
+      notes: formData.notes,
 
-    installation,
-    installation_fee: installation
-      ? installationFee
-      : 0,
+      installation,
+      installation_fee: installation
+        ? installationFee
+        : 0,
 
-    subtotal: totalAmount,
-    total: finalTotal,
+      subtotal: totalAmount,
+      total: finalTotal,
 
-    items: cartItems,
-  };
+      items: cartItems,
+    };
 
-  const { data, error } = await supabase
-    .from("orders")
-    .insert([orderData])
-    .select();
+    const { error } = await supabase
+      .from("Orders")
+      .insert([orderData]);
 
-  if (error) {
-    console.error("ORDER ERROR:", error);
+    if (error) {
+      console.error("ORDER ERROR:", error);
+
+      alert(
+        `There was a problem submitting your order:\n\n${error.message}`
+      );
+
+      return;
+    }
+
+    console.log("ORDER SAVED");
 
     alert(
-      "There was a problem submitting your order. Please try again."
+      "Thank you! Your order has been submitted successfully."
     );
-
-    return;
-  }
-
-  console.log("ORDER SAVED:", data);
-
-  alert(
-    "Thank you! Your order has been submitted successfully."
-  );
-};
+  };
 
   return (
     <motion.div
