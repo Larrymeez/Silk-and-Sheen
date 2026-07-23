@@ -10,6 +10,7 @@ FiShoppingBag,
 FiArrowLeft,
 FiCheck,
 } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 
 function CartPage() {
 const {
@@ -18,6 +19,8 @@ removeFromCart,
 updateQuantity,
 totalAmount,
 } = useContext(CartContext);
+
+const navigate = useNavigate();
 
 const [installationSelected, setInstallationSelected] = useState(false);
 
@@ -314,10 +317,11 @@ transition={{ duration: 0.8 }}
             </div>
 
             <button
-              className="w-full bg-gold text-black py-3.5 rounded-md font-semibold mt-8 hover:bg-yellow-600 transition"
-            >
-              Proceed to Order
-            </button>
+  onClick={() => navigate("/order")}
+  className="w-full bg-gold text-black py-3.5 rounded-md font-semibold mt-8 hover:bg-yellow-600 transition"
+>
+  Proceed to Order
+</button>
 
             <p className="text-gray-500 text-sm text-center mt-5">
               You will be able to review your order before submitting.
