@@ -54,22 +54,36 @@ function OrderPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const orderReference = `SS-${Date.now()
+      .toString()
+      .slice(-8)}`;
+
     const orderData = {
       customer_name: formData.name,
+
       customer_email: formData.email,
+
       customer_phone: formData.phone,
+
       delivery_location: formData.location,
+
       notes: formData.notes,
 
-      installation,
+      installation: installation,
+
       installation_fee: installation
         ? installationFee
         : 0,
 
       subtotal: totalAmount,
+
       total: finalTotal,
 
+      status: "pending",
+
       items: cartItems,
+
+      order_reference: orderReference,
     };
 
     const { error } = await supabase
@@ -86,10 +100,13 @@ function OrderPage() {
       return;
     }
 
-    console.log("ORDER SAVED");
+    console.log(
+      "ORDER SAVED:",
+      orderReference
+    );
 
     alert(
-      "Thank you! Your order has been submitted successfully."
+      `Thank you! Your order has been submitted successfully.\n\nOrder Reference: ${orderReference}`
     );
   };
 
