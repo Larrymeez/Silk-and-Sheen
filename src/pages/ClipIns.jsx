@@ -3,19 +3,8 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import hero3 from "../assets/hero3.jpg";
-import clip1 from "../assets/clipins1.jpg";
-import clip2 from "../assets/clipins2.jpg";
-import clip4 from "../assets/clipins4.jpg";
-import clip5 from "../assets/clipins5.jpg";
-import clip6 from "../assets/clipins6.jpg";
+import { products } from "../data/products";
 
-const products = [
-  { id: 1, name: "Brazilian Straight Clip-ins", basePrice: 12000, type: "Straight", image: clip1 },
-  { id: 2, name: "Brazilian Wavy Clip-ins", basePrice: 10000, type: "Wavy", image: clip2 },
-  { id: 3, name: "Peruvian Curly Clip-ins", basePrice: 12600, type: "Curly", image: clip4 },
-  { id: 4, name: "Brazilian Curly Clip-ins", basePrice: 11500, type: "Straight", image: clip5 },
-  { id: 5, name: "Malaysian Curly Clip-ins", basePrice: 10500, type: "Wavy", image: clip6 },
-];
 
 function ClipIns() {
   const navigate = useNavigate();

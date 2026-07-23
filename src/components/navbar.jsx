@@ -9,6 +9,7 @@ function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const { isOpen, setIsOpen, cartItems } = useContext(CartContext);
 
+  
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
@@ -78,5 +79,7 @@ function Navbar() {
     </nav>
   );
 }
+
+
 
 export default Navbar;

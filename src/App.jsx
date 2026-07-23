@@ -22,7 +22,7 @@ function Home() {
   const [letterIndex, setLetterIndex] = useState(0);
   const collectionsRef = useRef(null);
 
-  // ✅ FIXED (removed empty value)
+  // FIXED (removed empty value)
   const words = ["in Every strand", "Confidence"];
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
 
@@ -50,7 +50,7 @@ function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  // Rotating tagline
+  // Rotating Tagline
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentWordIndex(prev => (prev + 1) % words.length);
@@ -106,7 +106,6 @@ function Home() {
             }}
           />
 
-          {/* ✨ IMPROVED TYPEWRITER */}
           <motion.h1
             className="text-5xl md:text-6xl mb-4 text-white font-calligraphy italic tracking-wide"
             style={{
@@ -142,6 +141,7 @@ function Home() {
             </AnimatePresence>
           </motion.div>
 
+
           {/* Description */}
           <motion.p
             className="text-white text-lg max-w-md mb-8"
@@ -165,7 +165,7 @@ function Home() {
           </motion.div>
         </motion.div>
       </section>
-
+      
       {/* BELOW HERO */}
       <div ref={collectionsRef} className="w-full bg-brandbg">
         <CollectionsSection />
@@ -198,3 +198,4 @@ function App() {
 }
 
 export default App;
+
