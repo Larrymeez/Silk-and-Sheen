@@ -11,6 +11,7 @@ import {
   FiCheck,
 } from "react-icons/fi";
 import { CartContext } from "../context/CartContext.jsx";
+import { supabase } from "../lib/supabaseClient";
 
 function OrderPage() {
   const { cartItems, totalAmount } = useContext(CartContext);
@@ -50,26 +51,48 @@ function OrderPage() {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    const orderData = {
-      customer: formData,
-      installation,
-      cartItems,
-      subtotal: totalAmount,
-      installationFee: installation
-        ? installationFee
-        : 0,
-      total: finalTotal,
-    };
+  const orderData = {
+    customer_name: formData.name,
+    customer_email: formData.email,
+    customer_phone: formData.phone,
+    delivery_location: formData.location,
+    notes: formData.notes,
 
-    console.log("ORDER DATA:", orderData);
+    installation,
+    installation_fee: installation
+      ? installationFee
+      : 0,
+
+    subtotal: totalAmount,
+    total: finalTotal,
+
+    items: cartItems,
+  };
+
+  const { data, error } = await supabase
+    .from("orders")
+    .insert([orderData])
+    .select();
+
+  if (error) {
+    console.error("ORDER ERROR:", error);
 
     alert(
-      "Thank you! Your order has been submitted successfully."
+      "There was a problem submitting your order. Please try again."
     );
-  };
+
+    return;
+  }
+
+  console.log("ORDER SAVED:", data);
+
+  alert(
+    "Thank you! Your order has been submitted successfully."
+  );
+};
 
   return (
     <motion.div
