@@ -16,6 +16,7 @@ export const products = [
       "Premium Brazilian straight human hair clip-ins for seamless length, natural volume, and effortless styling.",
     startingLength: 14,
     pricePerExtraInch: 300,
+    stock : 5,
   },
 
   {
@@ -29,6 +30,7 @@ export const products = [
       "Beautiful Brazilian wavy clip-ins designed to blend naturally while adding instant volume and movement.",
     startingLength: 14,
     pricePerExtraInch: 300,
+     stock : 5,
   },
 
   {
@@ -42,6 +44,7 @@ export const products = [
       "Luxurious Peruvian curly clip-ins with beautiful texture, volume, and natural movement.",
     startingLength: 14,
     pricePerExtraInch: 300,
+     stock : 5,
   },
 
   {
@@ -55,6 +58,7 @@ export const products = [
       "Full-bodied Brazilian curly clip-ins for effortless volume and a beautifully natural finish.",
     startingLength: 14,
     pricePerExtraInch: 300,
+     stock : 5,
   },
 
   {
@@ -68,5 +72,6 @@ export const products = [
       "Soft, luxurious Malaysian curly clip-ins crafted for versatile styling and natural-looking volume.",
     startingLength: 14,
     pricePerExtraInch: 300,
+     stock : 5,
   },
 ];

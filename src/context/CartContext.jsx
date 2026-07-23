@@ -40,9 +40,16 @@ export function CartProvider({ children }) {
   };
 
   const totalAmount = cartItems.reduce(
-    (sum, item) => sum + (item.basePrice + (item.inches - 14) * 300) * item.quantity,
-    0
-  );
+  (sum, item) =>
+    sum +
+    (
+      item.basePrice +
+      (item.inches - item.startingLength) *
+        item.pricePerExtraInch
+    ) *
+      item.quantity,
+  0
+);
 
   return (
     <CartContext.Provider

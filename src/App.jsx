@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef } from "react";
 import logo from "./assets/logo.png";
 import Navbar from "./components/navbar";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -12,164 +12,270 @@ import ProductPage from "./pages/ProductPage";
 import CollectionsSection from "./components/CollectionsSection";
 import HowItWorksSection from "./components/HowItWorksSection";
 import Footer from "./components/Footer";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import hero1 from "./assets/hero1.jpg";
 import { CartProvider } from "./context/CartContext.jsx";
 import SideDrawerCart from "./components/SideDrawerCart";
+import CartPage from "./pages/CartPage.jsx";
+import OrderPage from "./pages/OrderPage";
 
 function Home() {
-  const [offsetY, setOffsetY] = useState(0);
-  const [letterIndex, setLetterIndex] = useState(0);
   const collectionsRef = useRef(null);
 
-  // FIXED (removed empty value)
-  const words = ["in Every strand", "Confidence"];
-  const [currentWordIndex, setCurrentWordIndex] = useState(0);
-
-  const fullText = "SILK & SHEEN ";
-
-  const smoothEase = [0.25, 0.8, 0.25, 1];
-
-  const sectionFade = {
-    hidden: { opacity: 0, y: 60 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: smoothEase } },
-  };
-
-  // Scroll tracking
-  useEffect(() => {
-    const handleScroll = () => setOffsetY(window.scrollY);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // Typewriter
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setLetterIndex(prev => (prev + 1 > fullText.length ? 0 : prev + 1));
-    }, 400);
-    return () => clearInterval(interval);
-  }, []);
-
-  // Rotating Tagline
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentWordIndex(prev => (prev + 1) % words.length);
-    }, 2500);
-    return () => clearInterval(interval);
-  }, []);
-
   const scrollToCollections = () => {
-    collectionsRef.current?.scrollIntoView({ behavior: "smooth" });
+    collectionsRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
   };
 
   return (
     <motion.div
-      className="relative flex flex-col items-center overflow-hidden"
+      className="relative flex flex-col items-center overflow-hidden bg-brandbg"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
     >
-      {/* HERO */}
-      <section className="relative w-full min-h-[600px] flex flex-col md:flex-row items-start justify-between px-6 md:px-20 pt-32 pb-20 overflow-hidden">
+      {/* HERO SECTION */}
+      <section className="relative w-full min-h-[680px] sm:min-h-[720px] lg:min-h-[760px] flex items-center overflow-hidden">
 
-        {/* Background */}
+        {/* Background Image */}
         <motion.img
           src={hero1}
-          alt="Hero Background"
-          className="absolute inset-0 w-full h-full object-cover -z-10"
-          animate={{ scale: [1, 1.05, 1] }}
-          transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
-          style={{ transform: `translateY(${offsetY * 0.25}px)` }}
+          alt="Silk & Sheen premium hair collection"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+          initial={{ scale: 1.02 }}
+          animate={{ scale: 1.05 }}
+          transition={{
+            duration: 24,
+            repeat: Infinity,
+            repeatType: "reverse",
+            ease: "easeInOut",
+          }}
         />
 
-        {/* Overlays */}
-        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-black/70 via-black/20 to-black/70" />
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.2)_0%,rgba(0,0,0,0.8)_100%)]" />
+        {/* Overall darkening */}
+        <div className="absolute inset-0 bg-black/25" />
 
-        {/* CONTENT */}
+        {/* Text-focused gradient */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/35 to-transparent" />
+
+        {/* Mobile-friendly bottom gradient */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent lg:hidden" />
+
+        {/* HERO CONTENT */}
         <motion.div
-          className="relative z-10 flex flex-col items-center md:items-start text-center md:text-left md:w-1/2"
-          variants={sectionFade}
-          initial="hidden"
-          animate="show"
+          className="
+            relative z-10
+            w-full
+            max-w-7xl
+            mx-auto
+            px-6
+            sm:px-10
+            md:px-16
+            lg:px-20
+            pt-24
+            pb-20
+          "
+          initial={{ opacity: 0, x: -40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{
+            duration: 1,
+            ease: [0.25, 0.8, 0.25, 1],
+          }}
         >
-          {/* Logo */}
-          <motion.img
-            src={logo}
-            alt="Logo"
-            className="w-40 md:w-48 mb-6 object-contain"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8 }}
-            style={{
-              filter: "drop-shadow(0 4px 12px rgba(0,0,0,0.6))",
-            }}
-          />
+          <div className="max-w-xl text-center md:text-left">
 
-          <motion.h1
-            className="text-5xl md:text-6xl mb-4 text-white font-calligraphy italic tracking-wide"
-            style={{
-              textShadow: "0 4px 12px rgba(0,0,0,0.6)",
-              letterSpacing: "0.08em",
-            }}
-          >
-            {fullText.slice(0, letterIndex)}
+            {/* Logo */}
+            <motion.img
+              src={logo}
+              alt="Silk & Sheen Logo"
+              className="
+                w-36
+                sm:w-40
+                md:w-48
+                lg:w-52
+                mx-auto
+                md:mx-0
+                mb-6
+                object-contain
+              "
+              initial={{ opacity: 0, scale: 0.92 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{
+                duration: 0.9,
+                delay: 0.2,
+              }}
+              style={{
+                filter: "drop-shadow(0 4px 12px rgba(0,0,0,0.65))",
+              }}
+            />
 
-            {/* Softer cursor */}
-            <span className="inline-block ml-1 opacity-70 animate-pulse">|</span>
-          </motion.h1>
-
-          {/* Tagline */}
-          <motion.div
-            className="h-10 mb-6 flex items-center justify-center md:justify-start"
-            style={{ transform: `translateY(${offsetY * 0.1}px)` }}
-          >
-            <AnimatePresence mode="wait">
-              <motion.span
-                key={words[currentWordIndex]}
-                initial={{ opacity: 0, scale: 0.9, y: 10 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 1.05, y: -10 }}
-                transition={{ duration: 0.6, ease: "easeInOut" }}
-                className="text-2xl md:text-3xl font-calligraphy italic font-semibold text-white"
-                style={{
-                  textShadow: "0 4px 12px rgba(0,0,0,0.6)",
-                }}
-              >
-                {words[currentWordIndex]}
-              </motion.span>
-            </AnimatePresence>
-          </motion.div>
-
-
-          {/* Description */}
-          <motion.p
-            className="text-white text-lg max-w-md mb-8"
-            style={{ textShadow: "0 2px 6px rgba(0,0,0,0.6)" }}
-          >
-            Premium wigs crafted for elegance, confidence and timeless beauty.
-          </motion.p>
-
-          {/* Buttons */}
-          <motion.div className="flex gap-4">
-            <button
-              onClick={scrollToCollections}
-              className="bg-gold text-white px-8 py-3 rounded-md text-lg hover:bg-yellow-600 transition transform hover:scale-105"
+            {/* Brand Name */}
+            <h1
+              className="
+                text-4xl
+                sm:text-5xl
+                md:text-6xl
+                lg:text-7xl
+                font-calligraphy
+                italic
+                text-white
+                tracking-wide
+                leading-tight
+              "
+              style={{
+                textShadow: "0 4px 14px rgba(0,0,0,0.7)",
+              }}
             >
-              Shop Collection
-            </button>
+              SILK & SHEEN
+            </h1>
 
-            <button className="border border-white text-white px-8 py-3 rounded-md text-lg hover:bg-white hover:text-black transition transform hover:scale-105">
-              Learn More
-            </button>
-          </motion.div>
+            {/* Tagline */}
+            <motion.p
+              className="
+                mt-4
+                text-2xl
+                sm:text-3xl
+                md:text-4xl
+                font-calligraphy
+                italic
+                text-white
+              "
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.8,
+                delay: 0.5,
+              }}
+              style={{
+                textShadow: "0 4px 12px rgba(0,0,0,0.7)",
+              }}
+            >
+              Confidence in every strand.
+            </motion.p>
+
+            {/* Description */}
+            <motion.p
+              className="
+                mt-6
+                text-base
+                sm:text-lg
+                md:text-xl
+                leading-relaxed
+                text-gray-100
+                max-w-lg
+              "
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.8,
+                delay: 0.7,
+              }}
+              style={{
+                textShadow: "0 2px 8px rgba(0,0,0,0.7)",
+              }}
+            >
+              Premium hair, wigs and extensions designed for effortless beauty
+              — whether you're dressing up or simply feeling like yourself.
+            </motion.p>
+
+            {/* Trust Line */}
+            <motion.p
+              className="
+                mt-5
+                text-xs
+                sm:text-sm
+                uppercase
+                tracking-[0.2em]
+                text-gray-200
+              "
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{
+                duration: 0.8,
+                delay: 0.9,
+              }}
+            >
+              Quality hair • Effortless style • Made for you
+            </motion.p>
+
+            {/* Buttons */}
+            <motion.div
+              className="
+                flex
+                flex-col
+                sm:flex-row
+                items-center
+                md:items-start
+                gap-4
+                mt-8
+              "
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.8,
+                delay: 1,
+              }}
+            >
+              <button
+                onClick={scrollToCollections}
+                className="
+                  w-full
+                  sm:w-auto
+                  bg-gold
+                  text-white
+                  px-8
+                  py-3.5
+                  rounded-md
+                  text-base
+                  sm:text-lg
+                  font-medium
+                  transition
+                  duration-300
+                  hover:bg-yellow-600
+                  hover:-translate-y-0.5
+                "
+              >
+                Shop Collection
+              </button>
+
+              <button
+                onClick={scrollToCollections}
+                className="
+                  w-full
+                  sm:w-auto
+                  border
+                  border-white/80
+                  text-white
+                  px-8
+                  py-3.5
+                  rounded-md
+                  text-base
+                  sm:text-lg
+                  font-medium
+                  transition
+                  duration-300
+                  hover:bg-white
+                  hover:text-black
+                "
+              >
+                Explore Our Styles
+              </button>
+            </motion.div>
+
+          </div>
         </motion.div>
       </section>
-      
-      {/* BELOW HERO */}
-      <div ref={collectionsRef} className="w-full bg-brandbg">
+
+      {/* COLLECTIONS */}
+      <div
+        ref={collectionsRef}
+        className="w-full bg-brandbg"
+      >
         <CollectionsSection />
+
         <HowItWorksSection />
+
         <Footer />
       </div>
     </motion.div>
@@ -180,22 +286,53 @@ function App() {
   return (
     <CartProvider>
       <Router>
+
         <Navbar />
-        <SideDrawerCart />
+
         <Routes>
           <Route path="/" element={<Home />} />
+
           <Route path="/bundles" element={<Bundles />} />
-          <Route path="/frontals-closures" element={<FrontalsClosures />} />
-          <Route path="/glueless-wigs" element={<GluelessWigs />} />
-          <Route path="/part-wigs" element={<PartWigs />} />
-          <Route path="/clip-ins" element={<ClipIns />} />
-          <Route path="/braiding-hair" element={<BraidingHair />} />
-          <Route path="/clip-ins/:id" element={<ProductPage />} />
+
+          <Route
+            path="/frontals-closures"
+            element={<FrontalsClosures />}
+          />
+
+          <Route
+            path="/glueless-wigs"
+            element={<GluelessWigs />}
+          />
+
+          <Route
+            path="/part-wigs"
+            element={<PartWigs />}
+          />
+
+          <Route
+            path="/clip-ins"
+            element={<ClipIns />}
+          />
+
+          <Route
+            path="/braiding-hair"
+            element={<BraidingHair />}
+          />
+
+          <Route
+            path="/clip-ins/:id"
+            element={<ProductPage />}
+          />
+
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/order" element={<OrderPage />} />
         </Routes>
+
+        <SideDrawerCart />
+
       </Router>
     </CartProvider>
   );
 }
 
 export default App;
-
