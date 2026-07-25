@@ -230,6 +230,7 @@ function Navbar() {
                 {cartItems.length}
               </span>
             )}
+            
           </div>
         </div>
 
