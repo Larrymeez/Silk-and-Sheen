@@ -159,4 +159,5 @@ function QuickShopCarousel() {
   );
 }
 
+
 export default QuickShopCarousel;
