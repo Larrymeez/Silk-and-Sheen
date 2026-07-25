@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import hero3 from "../assets/hero3.jpg";
 import { products } from "../data/products";
+import Footer from "../components/Footer";
 
 function ClipIns() {
   const navigate = useNavigate();
@@ -488,6 +489,8 @@ function ClipIns() {
         </section>
 
       </div>
+
+      <Footer />
 
     </motion.main>
   );
