@@ -326,6 +326,8 @@ function App() {
 
           <Route path="/cart" element={<CartPage />} />
           <Route path="/order" element={<OrderPage />} />
+          
+
         </Routes>
 
         <SideDrawerCart />
