@@ -18,6 +18,7 @@ import SideDrawerCart from "./components/SideDrawerCart";
 import CartPage from "./pages/CartPage.jsx";
 import OrderPage from "./pages/OrderPage";
 import QuickShopCarousel from "./components/QuickShopCarousel";
+import VisitUsSection from "./components/VisitUsSection";
 
 function Home() {
   const quickShopRef = useRef(null);
@@ -187,6 +188,7 @@ function Home() {
       <div ref={collectionsRef} className="w-full bg-brandbg">
         <CollectionsSection />
         <HowItWorksSection />
+        <VisitUsSection />
         <Footer />
       </div>
     </motion.div>
