@@ -1,0 +1,20 @@
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Vercel
+.vercel/
+
+# Supabase local files
+supabase/.branches/
+supabase/.temp/
+
+# VS Code
+.vscode/

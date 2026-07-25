@@ -52,63 +52,77 @@ function OrderPage() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const orderReference = `SS-${Date.now()
-      .toString()
-      .slice(-8)}`;
+  const orderReference = `SS-${Date.now()
+    .toString()
+    .slice(-8)}`;
 
-    const orderData = {
-      customer_name: formData.name,
+  const orderData = {
+    order_reference: orderReference,
 
-      customer_email: formData.email,
+    customer_name: formData.name,
+    customer_email: formData.email,
+    customer_phone: formData.phone,
+    delivery_location: formData.location,
+    notes: formData.notes,
 
-      customer_phone: formData.phone,
+    installation,
 
-      delivery_location: formData.location,
+    items: cartItems,
 
-      notes: formData.notes,
+    subtotal: totalAmount,
 
-      installation: installation,
+    installation_fee: installation
+      ? installationFee
+      : 0,
 
-      installation_fee: installation
-        ? installationFee
-        : 0,
+    total: finalTotal,
 
-      subtotal: totalAmount,
+    status: "pending",
+  };
 
-      total: finalTotal,
+  // 1️⃣ SAVE ORDER TO SUPABASE
+  const { error: orderError } = await supabase
+    .from("Orders")
+    .insert([orderData]);
 
-      status: "pending",
-
-      items: cartItems,
-
-      order_reference: orderReference,
-    };
-
-    const { error } = await supabase
-      .from("Orders")
-      .insert([orderData]);
-
-    if (error) {
-      console.error("ORDER ERROR:", error);
-
-      alert(
-        `There was a problem submitting your order:\n\n${error.message}`
-      );
-
-      return;
-    }
-
-    console.log(
-      "ORDER SAVED:",
-      orderReference
-    );
+  if (orderError) {
+    console.error("ORDER ERROR:", orderError);
 
     alert(
-      `Thank you! Your order has been submitted successfully.\n\nOrder Reference: ${orderReference}`
+      `There was a problem submitting your order:\n\n${orderError.message}`
     );
-  };
+
+    return;
+  }
+
+  // 2️⃣ SEND ORDER EMAIL
+  const { data: emailData, error: emailError } =
+    await supabase.functions.invoke(
+      "send-order-email",
+      {
+        body: orderData,
+      }
+    );
+
+  if (emailError) {
+    console.error("EMAIL ERROR:", emailError);
+
+    alert(
+      `Your order was saved, but the confirmation email could not be sent.\n\nOrder Reference: ${orderReference}`
+    );
+
+    return;
+  }
+
+  console.log("EMAIL SENT:", emailData);
+
+  // 3️⃣ SUCCESS
+  alert(
+    `Thank you! Your order has been submitted successfully.\n\nOrder Reference: ${orderReference}`
+  );
+};
 
   return (
     <motion.div
