@@ -14,9 +14,18 @@ import { CartContext } from "../context/CartContext.jsx";
 import { supabase } from "../lib/supabaseClient";
 
 function OrderPage() {
-  const { cartItems, totalAmount } = useContext(CartContext);
+  const {
+    cartItems,
+    totalAmount,
+    clearCart,
+  } = useContext(CartContext);
 
   const [installation, setInstallation] = useState(false);
+
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+  const [submittedOrderReference, setSubmittedOrderReference] =
+    useState("");
 
   const [formData, setFormData] = useState({
     name: "",
@@ -33,7 +42,7 @@ function OrderPage() {
     : totalAmount;
 
   const formatPrice = (price) => {
-    return Number(price).toLocaleString();
+    return Number(price).toLocaleString("en-KE");
   };
 
   const getItemPrice = (item) => {
@@ -52,77 +61,86 @@ function OrderPage() {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const orderReference = `SS-${Date.now()
-    .toString()
-    .slice(-8)}`;
+    const orderReference = `SS-${Date.now()
+      .toString()
+      .slice(-8)}`;
 
-  const orderData = {
-    order_reference: orderReference,
+    const orderData = {
+      order_reference: orderReference,
 
-    customer_name: formData.name,
-    customer_email: formData.email,
-    customer_phone: formData.phone,
-    delivery_location: formData.location,
-    notes: formData.notes,
+      customer_name: formData.name,
+      customer_email: formData.email,
+      customer_phone: formData.phone,
+      delivery_location: formData.location,
+      notes: formData.notes,
 
-    installation,
+      installation,
 
-    items: cartItems,
+      items: cartItems,
 
-    subtotal: totalAmount,
+      subtotal: totalAmount,
 
-    installation_fee: installation
-      ? installationFee
-      : 0,
+      installation_fee: installation
+        ? installationFee
+        : 0,
 
-    total: finalTotal,
+      total: finalTotal,
 
-    status: "pending",
-  };
+      status: "pending",
+    };
 
-  // 1️⃣ SAVE ORDER TO SUPABASE
-  const { error: orderError } = await supabase
-    .from("Orders")
-    .insert([orderData]);
+    // 1️⃣ SAVE ORDER TO SUPABASE
 
-  if (orderError) {
-    console.error("ORDER ERROR:", orderError);
+    const { error: orderError } = await supabase
+      .from("Orders")
+      .insert([orderData]);
 
-    alert(
-      `There was a problem submitting your order:\n\n${orderError.message}`
-    );
+    if (orderError) {
+      console.error("ORDER ERROR:", orderError);
 
-    return;
-  }
+      alert(
+        `There was a problem submitting your order:\n\n${orderError.message}`
+      );
 
-  // 2️⃣ SEND ORDER EMAIL
-  const { data: emailData, error: emailError } =
-    await supabase.functions.invoke(
+      return;
+    }
+
+    // 2️⃣ SEND ORDER EMAIL
+
+    const {
+      data: emailData,
+      error: emailError,
+    } = await supabase.functions.invoke(
       "send-order-email",
       {
         body: orderData,
       }
     );
 
-  if (emailError) {
-    console.error("EMAIL ERROR:", emailError);
+    if (emailError) {
+      console.error("EMAIL ERROR:", emailError);
 
-    alert(
-      `Your order was saved, but the confirmation email could not be sent.\n\nOrder Reference: ${orderReference}`
-    );
+      alert(
+        `Your order was saved, but the confirmation email could not be sent.\n\nOrder Reference: ${orderReference}`
+      );
 
-    return;
-  }
+      return;
+    }
 
-  console.log("EMAIL SENT:", emailData);
+    console.log("EMAIL SENT:", emailData);
 
-  // 3️⃣ SUCCESS
-  alert(
-    `Thank you! Your order has been submitted successfully.\n\nOrder Reference: ${orderReference}`
-  );
-};
+    // 3️⃣ CLEAR CART
+
+    clearCart();
+
+    // 4️⃣ SHOW SUCCESS MODAL
+
+    setSubmittedOrderReference(orderReference);
+
+    setShowSuccessModal(true);
+  };
 
   return (
     <motion.div
@@ -134,6 +152,7 @@ function OrderPage() {
       <div className="max-w-7xl mx-auto">
 
         {/* BACK LINK */}
+
         <Link
           to="/cart"
           className="inline-flex items-center gap-2 text-gray-400 hover:text-gold transition mb-8"
@@ -143,6 +162,7 @@ function OrderPage() {
         </Link>
 
         {/* HEADER */}
+
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -163,12 +183,15 @@ function OrderPage() {
           </p>
         </motion.div>
 
+        {/* ORDER FORM */}
+
         <form
           onSubmit={handleSubmit}
           className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12"
         >
 
           {/* CUSTOMER DETAILS */}
+
           <motion.div
             className="lg:col-span-2"
             initial={{ opacity: 0, x: -30 }}
@@ -185,6 +208,7 @@ function OrderPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
                 {/* NAME */}
+
                 <div>
                   <label className="flex items-center gap-2 text-sm text-gray-300 mb-2">
                     <FiUser />
@@ -203,6 +227,7 @@ function OrderPage() {
                 </div>
 
                 {/* EMAIL */}
+
                 <div>
                   <label className="flex items-center gap-2 text-sm text-gray-300 mb-2">
                     <FiMail />
@@ -221,6 +246,7 @@ function OrderPage() {
                 </div>
 
                 {/* PHONE */}
+
                 <div>
                   <label className="flex items-center gap-2 text-sm text-gray-300 mb-2">
                     <FiPhone />
@@ -239,6 +265,7 @@ function OrderPage() {
                 </div>
 
                 {/* LOCATION */}
+
                 <div>
                   <label className="flex items-center gap-2 text-sm text-gray-300 mb-2">
                     <FiMapPin />
@@ -259,6 +286,7 @@ function OrderPage() {
               </div>
 
               {/* NOTES */}
+
               <div className="mt-6">
 
                 <label className="flex items-center gap-2 text-sm text-gray-300 mb-2">
@@ -278,6 +306,7 @@ function OrderPage() {
               </div>
 
               {/* INSTALLATION */}
+
               <div className="mt-10">
 
                 <h2 className="text-2xl font-semibold mb-5">
@@ -287,6 +316,7 @@ function OrderPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
                   {/* NO INSTALLATION */}
+
                   <button
                     type="button"
                     onClick={() => setInstallation(false)}
@@ -296,6 +326,7 @@ function OrderPage() {
                         : "border-white/10 bg-white/5 hover:border-white/30"
                     }`}
                   >
+
                     <div className="flex items-center justify-between mb-3">
 
                       <span className="font-semibold">
@@ -319,6 +350,7 @@ function OrderPage() {
                   </button>
 
                   {/* INSTALLATION */}
+
                   <button
                     type="button"
                     onClick={() => setInstallation(true)}
@@ -328,6 +360,7 @@ function OrderPage() {
                         : "border-white/10 bg-white/5 hover:border-white/30"
                     }`}
                   >
+
                     <div className="flex items-center justify-between mb-3">
 
                       <span className="font-semibold">
@@ -359,6 +392,7 @@ function OrderPage() {
           </motion.div>
 
           {/* ORDER SUMMARY */}
+
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
@@ -371,6 +405,7 @@ function OrderPage() {
             </h2>
 
             {/* ITEMS */}
+
             <div className="flex flex-col gap-5 mb-8">
 
               {cartItems.map((item) => {
@@ -416,17 +451,24 @@ function OrderPage() {
 
             </div>
 
+            {/* TOTALS */}
+
             <div className="border-t border-white/10 pt-5 space-y-4">
 
               <div className="flex justify-between text-gray-400">
                 <span>Subtotal</span>
+
                 <span>
                   KES {formatPrice(totalAmount)}
                 </span>
               </div>
 
               <div className="flex justify-between text-gray-400">
-                <span>Installation</span>
+
+                <span>
+                  Installation
+                </span>
+
                 <span>
                   {installation
                     ? `KES ${formatPrice(
@@ -434,6 +476,7 @@ function OrderPage() {
                       )}`
                     : "Free"}
                 </span>
+
               </div>
 
               <div className="border-t border-white/10 pt-5 flex justify-between items-center">
@@ -449,6 +492,8 @@ function OrderPage() {
               </div>
 
             </div>
+
+            {/* SUBMIT BUTTON */}
 
             <button
               type="submit"
@@ -467,6 +512,102 @@ function OrderPage() {
         </form>
 
       </div>
+
+      {/* SUCCESS MODAL */}
+
+      {showSuccessModal && (
+        <motion.div
+          className="fixed inset-0 z-50 flex items-center justify-center px-5 bg-black/80 backdrop-blur-md"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+
+          <motion.div
+            className="relative w-full max-w-md bg-brandbg border border-white/10 rounded-3xl p-8 sm:p-10 text-center shadow-2xl"
+            initial={{
+              opacity: 0,
+              scale: 0.85,
+              y: 30,
+            }}
+            animate={{
+              opacity: 1,
+              scale: 1,
+              y: 0,
+            }}
+            transition={{
+              duration: 0.5,
+              ease: "easeOut",
+            }}
+          >
+
+            {/* SUCCESS ICON */}
+
+            <motion.div
+              className="mx-auto mb-6 w-20 h-20 rounded-full bg-gold/10 border border-gold/40 flex items-center justify-center"
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{
+                delay: 0.2,
+                type: "spring",
+                stiffness: 200,
+              }}
+            >
+
+              <FiCheck
+                className="text-gold"
+                size={38}
+              />
+
+            </motion.div>
+
+            {/* TITLE */}
+
+            <h2 className="text-3xl font-semibold mb-3">
+              Order Received
+            </h2>
+
+            {/* MESSAGE */}
+
+            <p className="text-gray-400 leading-relaxed mb-7">
+              Thank you for choosing Silk & Sheen.
+              Your order has been successfully submitted.
+            </p>
+
+            {/* ORDER REFERENCE */}
+
+            <div className="bg-white/5 border border-white/10 rounded-xl p-5 mb-7">
+
+              <p className="text-xs text-gray-500 uppercase tracking-[0.2em] mb-2">
+                Order Reference
+              </p>
+
+              <p className="text-gold text-xl font-semibold tracking-wider">
+                {submittedOrderReference}
+              </p>
+
+            </div>
+
+            {/* FINAL MESSAGE */}
+
+            <p className="text-gray-400 text-sm mb-8">
+              We'll be in touch.
+            </p>
+
+            {/* CONTINUE SHOPPING */}
+
+            <Link
+              to="/"
+              onClick={() => setShowSuccessModal(false)}
+              className="block w-full bg-gold text-black py-3.5 rounded-xl font-semibold hover:bg-yellow-600 transition"
+            >
+              Continue Shopping
+            </Link>
+
+          </motion.div>
+
+        </motion.div>
+      )}
 
     </motion.div>
   );
