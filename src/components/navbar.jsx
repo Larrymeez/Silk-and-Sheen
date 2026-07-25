@@ -1,20 +1,74 @@
 // src/components/Navbar.jsx
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useRef } from "react";
 import logo from "../assets/logo.png";
-import { FiSearch, FiShoppingCart, FiUser } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { FiSearch, FiShoppingCart, FiUser, FiX } from "react-icons/fi";
+import { Link, useNavigate } from "react-router-dom";
 import { CartContext } from "../context/CartContext.jsx";
+import { products } from "../data/products";
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const { isOpen, setIsOpen, cartItems } = useContext(CartContext);
+  const navigate = useNavigate();
 
-  
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const searchRef = useRef(null);
+  const inputRef = useRef(null);
+
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Close search dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (searchRef.current && !searchRef.current.contains(e.target)) {
+        setSearchOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const openSearch = () => {
+    setSearchOpen(true);
+    // wait for input to mount before focusing
+    setTimeout(() => inputRef.current?.focus(), 50);
+  };
+
+  const closeSearch = () => {
+    setSearchOpen(false);
+    setQuery("");
+  };
+
+  const results =
+    query.trim().length > 0
+      ? products
+          .filter((p) => {
+            const q = query.toLowerCase();
+            return (
+              p.name?.toLowerCase().includes(q) ||
+              p.category?.toLowerCase().includes(q) ||
+              p.type?.toLowerCase().includes(q)
+            );
+          })
+          .slice(0, 6)
+      : [];
+
+  const goToProduct = (id) => {
+    navigate(`/product/${id}`);
+    closeSearch();
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (results.length > 0) {
+      goToProduct(results[0].id);
+    }
+  };
 
   return (
     <nav
@@ -28,7 +82,7 @@ function Navbar() {
 
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3 cursor-pointer">
-          <img src={logo} alt="Logo" className="w-20 md:w-24" /> {/* Slightly larger */}
+          <img src={logo} alt="Logo" className="w-20 md:w-24" />
           <span className="text-xl md:text-2xl font-bold tracking-widest text-white">
             SILK & SHEEN
           </span>
@@ -58,7 +112,111 @@ function Navbar() {
 
         {/* Icons */}
         <div className="flex items-center gap-6 text-xl text-white">
-          <FiSearch className="cursor-pointer hover:text-gold transition" />
+
+          {/* SEARCH */}
+          <div ref={searchRef} className="relative flex items-center">
+            {searchOpen ? (
+              <form onSubmit={handleSubmit} className="flex items-center">
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Search products..."
+                  className="
+                    w-40
+                    sm:w-64
+                    bg-white/95
+                    text-black
+                    text-sm
+                    placeholder-gray-500
+                    rounded-md
+                    px-3
+                    py-2
+                    outline-none
+                    focus:ring-2
+                    focus:ring-gold
+                  "
+                />
+                <button
+                  type="button"
+                  onClick={closeSearch}
+                  className="ml-2 text-white hover:text-gold transition"
+                  aria-label="Close search"
+                >
+                  <FiX />
+                </button>
+
+                {/* RESULTS DROPDOWN */}
+                {query.trim().length > 0 && (
+                  <div
+                    className="
+                      absolute
+                      top-full
+                      right-0
+                      mt-2
+                      w-72
+                      sm:w-80
+                      bg-white
+                      text-black
+                      rounded-xl
+                      shadow-xl
+                      overflow-hidden
+                      max-h-96
+                      overflow-y-auto
+                      z-50
+                    "
+                  >
+                    {results.length > 0 ? (
+                      results.map((product) => (
+                        <button
+                          key={product.id}
+                          type="button"
+                          onClick={() => goToProduct(product.id)}
+                          className="
+                            w-full
+                            flex
+                            items-center
+                            gap-3
+                            px-4
+                            py-3
+                            hover:bg-gray-100
+                            transition
+                            text-left
+                          "
+                        >
+                          <img
+                            src={product.image}
+                            alt={product.name}
+                            className="w-12 h-12 object-cover rounded-md flex-shrink-0"
+                          />
+                          <div className="min-w-0">
+                            <p className="text-sm font-medium truncate">
+                              {product.name}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              KSh {product.basePrice?.toLocaleString()}
+                            </p>
+                          </div>
+                        </button>
+                      ))
+                    ) : (
+                      <p className="px-4 py-4 text-sm text-gray-500">
+                        No products found.
+                      </p>
+                    )}
+                  </div>
+                )}
+              </form>
+            ) : (
+              <FiSearch
+                onClick={openSearch}
+                className="cursor-pointer hover:text-gold transition"
+                aria-label="Open search"
+              />
+            )}
+          </div>
+
           <FiUser className="cursor-pointer hover:text-gold transition" />
 
           {/* Shopping Cart */}
@@ -79,7 +237,5 @@ function Navbar() {
     </nav>
   );
 }
-
-
 
 export default Navbar;
