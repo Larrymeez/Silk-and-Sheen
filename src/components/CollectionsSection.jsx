@@ -1,8 +1,7 @@
 // src/components/CollectionsSection.jsx
-
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
-import { FiArrowUpRight } from "react-icons/fi";
+import { motion, AnimatePresence } from "framer-motion";
 
 import bundles1 from "../assets/bundles1.jpg";
 import frontal1 from "../assets/frontal1.jpg";
@@ -12,314 +11,117 @@ import clipins3 from "../assets/clipins3.jpg";
 import braiding1 from "../assets/braiding1.jpg";
 
 const categories = [
-  {
-    name: "Bundles",
-    image: bundles1,
-    path: "/bundles",
-  },
-  {
-    name: "Frontals & Closures",
-    image: frontal1,
-    path: "/frontals-closures",
-  },
-  {
-    name: "Glueless Lace Wigs",
-    image: glueless1,
-    path: "/glueless-wigs",
-  },
-  {
-    name: "Part Wigs",
-    image: part3,
-    path: "/part-wigs",
-  },
-  {
-    name: "Clip-ins",
-    image: clipins3,
-    path: "/clip-ins",
-  },
-  {
-    name: "Braiding Hair",
-    image: braiding1,
-    path: "/braiding-hair",
-  },
+  { name: "Bundles", image: bundles1, path: "/bundles" },
+  { name: "Frontals & Closures", image: frontal1, path: "/frontals-closures" },
+  { name: "Glueless Lace Wigs", image: glueless1, path: "/glueless-wigs" },
+  { name: "Part Wigs", image: part3, path: "/part-wigs" },
+  { name: "Clip-ins", image: clipins3, path: "/clip-ins" },
+  { name: "Braiding Hair", image: braiding1, path: "/braiding-hair" },
 ];
 
 function CollectionsSection() {
-  const containerVariants = {
-    hidden: {},
-    visible: {
-      transition: {
-        staggerChildren: 0.12,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: {
-      opacity: 0,
-      y: 35,
-    },
-
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.7,
-        ease: [0.25, 0.8, 0.25, 1],
-      },
-    },
-  };
+  const [active, setActive] = useState(categories[0]);
 
   return (
-    <motion.section
-      className="
-        bg-brandbg
-        text-white
-        py-20
-        sm:py-24
-        lg:py-32
-        px-5
-        sm:px-8
-        lg:px-12
-      "
-      variants={containerVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{
-        once: false,
-        amount: 0.15,
-      }}
-    >
+    <section className="bg-brandbg text-white py-20 sm:py-24 lg:py-32 px-5 sm:px-8 lg:px-16">
+      <div className="max-w-7xl mx-auto">
 
-      {/* SECTION HEADER */}
-
-      <motion.div
-        variants={itemVariants}
-        className="
-          max-w-3xl
-          mx-auto
-          text-center
-          mb-14
-          sm:mb-16
-        "
-      >
-
-        <h2
-          className="
-            font-calligraphy
-            italic
-            text-4xl
-            sm:text-5xl
-            md:text-6xl
-            font-bold
-            tracking-wide
-            text-white
-          "
-          style={{
-            textShadow: "0 3px 12px rgba(0,0,0,0.45)",
-          }}
+        {/* HEADER */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.7 }}
+          className="max-w-2xl mb-14 sm:mb-16"
         >
-          Our Collections
-        </h2>
+          <p className="text-gold text-xs sm:text-sm uppercase tracking-[0.25em] mb-4">
+            The Index
+          </p>
+          <h2 className="font-calligraphy italic text-4xl sm:text-5xl md:text-6xl text-white">
+            Our Collections
+          </h2>
+        </motion.div>
 
-        <p
-          className="
-            mt-5
-            text-gray-300
-            text-base
-            sm:text-lg
-            leading-relaxed
-          "
-        >
-          Explore carefully curated collections designed to complement
-          your style, your confidence, and every version of you.
-        </p>
+        {/* INDEX + PREVIEW LAYOUT */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
 
-      </motion.div>
-
-
-      {/* COLLECTION GRID */}
-
-      <motion.div
-        variants={containerVariants}
-        className="
-          max-w-7xl
-          mx-auto
-          grid
-          grid-cols-1
-          sm:grid-cols-2
-          lg:grid-cols-3
-          gap-6
-          sm:gap-8
-          lg:gap-10
-        "
-      >
-
-        {categories.map((category) => (
-
-          <motion.div
-            key={category.name}
-            variants={itemVariants}
-          >
-
-            <Link
-              to={category.path}
-              className="
-                group
-                block
-                relative
-                overflow-hidden
-                rounded-xl
-                bg-black
-                shadow-lg
-              "
-            >
-
-              {/* IMAGE */}
-
-              <div
-                className="
-                  relative
-                  aspect-[4/5]
-                  overflow-hidden
-                "
-              >
-
-                <img
-                  src={category.image}
-                  alt={category.name}
-                  className="
-                    w-full
-                    h-full
-                    object-cover
-                    transition-transform
-                    duration-700
-                    ease-out
-                    group-hover:scale-105
-                  "
-                />
-
-                {/* SUBTLE DARK GRADIENT */}
-
-                <div
-                  className="
-                    absolute
-                    inset-0
-                    bg-gradient-to-t
-                    from-black/80
-                    via-black/10
-                    to-transparent
-                    opacity-90
-                  "
-                />
-
-                {/* HOVER LIGHT EFFECT */}
-
-                <div
-                  className="
-                    absolute
-                    inset-0
-                    bg-white/5
-                    opacity-0
-                    transition-opacity
-                    duration-500
-                    group-hover:opacity-100
-                  "
-                />
-
-              </div>
-
-
-              {/* CARD CONTENT */}
-
-              <div
-                className="
-                  absolute
-                  bottom-0
-                  left-0
-                  right-0
-                  p-5
-                  sm:p-6
-                "
-              >
-
-                <div
-                  className="
-                    flex
-                    items-end
-                    justify-between
-                    gap-4
-                  "
+          {/* LEFT: LIST */}
+          <ul className="divide-y divide-white/10 border-t border-white/10 lg:border-t-0">
+            {categories.map((category, index) => (
+              <li key={category.name}>
+                <Link
+                  to={category.path}
+                  onMouseEnter={() => setActive(category)}
+                  onFocus={() => setActive(category)}
+                  className="group flex items-center justify-between gap-6 py-6 sm:py-7"
                 >
+                  <div className="flex items-baseline gap-5 sm:gap-7 min-w-0">
+                    <span className="text-xs text-gray-500 tabular-nums">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
 
-                  {/* CATEGORY NAME */}
-
-                  <h3
-                    className="
-                      text-xl
-                      sm:text-2xl
-                      font-semibold
-                      tracking-wide
-                      text-white
-                    "
-                  >
-                    {category.name}
-                  </h3>
-
-
-                  {/* ARROW */}
-
-                  <div
-                    className="
-                      flex
-                      items-center
-                      justify-center
-                      w-10
-                      h-10
-                      rounded-full
-                      border
-                      border-white/40
-                      text-white
-                      transition-all
-                      duration-500
-                      group-hover:bg-gold
-                      group-hover:border-gold
-                      group-hover:text-black
-                      group-hover:rotate-45
-                    "
-                  >
-                    <FiArrowUpRight size={19} />
+                    <span
+                      className="
+                        text-xl sm:text-2xl md:text-3xl font-semibold tracking-tight
+                        text-gray-300 group-hover:text-white
+                        transition-colors duration-300
+                        truncate
+                      "
+                    >
+                      {category.name}
+                    </span>
                   </div>
 
-                </div>
+                  {/* Right side: thumbnail on mobile, arrow on desktop */}
+                  <div className="flex items-center gap-4 shrink-0">
+                    <img
+                      src={category.image}
+                      alt=""
+                      className="lg:hidden w-14 h-14 rounded-md object-cover"
+                    />
+                    <span
+                      className="
+                        hidden lg:inline text-lg text-gray-600
+                        transition-all duration-300
+                        group-hover:text-gold group-hover:translate-x-1
+                      "
+                    >
+                      →
+                    </span>
+                  </div>
+                </Link>
+              </li>
+            ))}
+          </ul>
 
+          {/* RIGHT: STICKY PREVIEW (desktop only) */}
+          <div className="hidden lg:block lg:sticky lg:top-32">
+            <div className="relative aspect-[4/5] rounded-sm overflow-hidden bg-gray-900">
+              <AnimatePresence mode="wait">
+                <motion.img
+                  key={active.name}
+                  src={active.image}
+                  alt={active.name}
+                  initial={{ opacity: 0, scale: 1.04 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.5, ease: [0.25, 0.8, 0.25, 1] }}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+              </AnimatePresence>
 
-                {/* EXPLORE TEXT */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
 
-                <div
-                  className="
-                    mt-3
-                    text-sm
-                    text-gray-300
-                    transition-all
-                    duration-500
-                    group-hover:text-gold
-                  "
-                >
-                  Explore Collection
-                </div>
+              <p className="absolute bottom-6 left-6 font-calligraphy italic text-2xl text-gold">
+                {active.name}
+              </p>
+            </div>
+          </div>
 
-              </div>
+        </div>
 
-            </Link>
-
-          </motion.div>
-
-        ))}
-
-      </motion.div>
-
-    </motion.section>
+      </div>
+    </section>
   );
 }
 
