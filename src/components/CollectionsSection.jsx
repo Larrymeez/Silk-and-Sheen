@@ -1,5 +1,5 @@
 // src/components/CollectionsSection.jsx
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -19,8 +19,24 @@ const categories = [
   { name: "Braiding Hair", image: braiding1, path: "/braiding-hair" },
 ];
 
+const AUTO_ADVANCE_MS = 4000;
+
 function CollectionsSection() {
-  const [active, setActive] = useState(categories[0]);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const intervalRef = useRef(null);
+
+  useEffect(() => {
+    if (isPaused) return;
+
+    intervalRef.current = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % categories.length);
+    }, AUTO_ADVANCE_MS);
+
+    return () => clearInterval(intervalRef.current);
+  }, [isPaused]);
+
+  const active = categories[activeIndex];
 
   return (
     <section className="bg-brandbg text-white py-20 sm:py-24 lg:py-32 px-5 sm:px-8 lg:px-16">
@@ -43,7 +59,10 @@ function CollectionsSection() {
         </motion.div>
 
         {/* INDEX + PREVIEW LAYOUT */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
+        <div
+          className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start"
+          onMouseLeave={() => setIsPaused(false)}
+        >
 
           {/* LEFT: LIST */}
           <ul className="divide-y divide-white/10 border-t border-white/10 lg:border-t-0">
@@ -51,28 +70,37 @@ function CollectionsSection() {
               <li key={category.name}>
                 <Link
                   to={category.path}
-                  onMouseEnter={() => setActive(category)}
-                  onFocus={() => setActive(category)}
+                  onMouseEnter={() => {
+                    setIsPaused(true);
+                    setActiveIndex(index);
+                  }}
+                  onFocus={() => {
+                    setIsPaused(true);
+                    setActiveIndex(index);
+                  }}
                   className="group flex items-center justify-between gap-6 py-6 sm:py-7"
                 >
                   <div className="flex items-baseline gap-5 sm:gap-7 min-w-0">
-                    <span className="text-xs text-gray-500 tabular-nums">
+                    <span
+                      className={`text-xs tabular-nums transition-colors duration-300 ${
+                        index === activeIndex ? "text-gold" : "text-gray-500"
+                      }`}
+                    >
                       {String(index + 1).padStart(2, "0")}
                     </span>
 
                     <span
-                      className="
-                        text-xl sm:text-2xl md:text-3xl font-semibold tracking-tight
-                        text-gray-300 group-hover:text-white
+                      className={`
+                        text-lg sm:text-xl font-semibold tracking-tight
                         transition-colors duration-300
                         truncate
-                      "
+                        ${index === activeIndex ? "text-white" : "text-gray-400 group-hover:text-white"}
+                      `}
                     >
                       {category.name}
                     </span>
                   </div>
 
-                  {/* Right side: thumbnail on mobile, arrow on desktop */}
                   <div className="flex items-center gap-4 shrink-0">
                     <img
                       src={category.image}
@@ -80,11 +108,11 @@ function CollectionsSection() {
                       className="lg:hidden w-14 h-14 rounded-md object-cover"
                     />
                     <span
-                      className="
-                        hidden lg:inline text-lg text-gray-600
+                      className={`
+                        hidden lg:inline text-lg
                         transition-all duration-300
-                        group-hover:text-gold group-hover:translate-x-1
-                      "
+                        ${index === activeIndex ? "text-gold translate-x-1" : "text-gray-600 group-hover:text-gold group-hover:translate-x-1"}
+                      `}
                     >
                       →
                     </span>
@@ -96,7 +124,7 @@ function CollectionsSection() {
 
           {/* RIGHT: STICKY PREVIEW (desktop only) */}
           <div className="hidden lg:block lg:sticky lg:top-32">
-            <div className="relative aspect-[4/5] rounded-sm overflow-hidden bg-gray-900">
+            <div className="relative aspect-[4/5] max-h-[70vh] rounded-sm overflow-hidden bg-gray-900 mx-auto">
               <AnimatePresence mode="wait">
                 <motion.img
                   key={active.name}
@@ -105,7 +133,7 @@ function CollectionsSection() {
                   initial={{ opacity: 0, scale: 1.04 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0 }}
-                  transition={{ duration: 0.5, ease: [0.25, 0.8, 0.25, 1] }}
+                  transition={{ duration: 0.8, ease: [0.25, 0.8, 0.25, 1] }}
                   className="absolute inset-0 w-full h-full object-cover"
                 />
               </AnimatePresence>
@@ -115,6 +143,18 @@ function CollectionsSection() {
               <p className="absolute bottom-6 left-6 font-calligraphy italic text-2xl text-gold">
                 {active.name}
               </p>
+
+              {/* Progress dots */}
+              <div className="absolute top-6 right-6 flex gap-1.5">
+                {categories.map((cat, i) => (
+                  <span
+                    key={cat.name}
+                    className={`h-1 rounded-full transition-all duration-500 ${
+                      i === activeIndex ? "w-6 bg-gold" : "w-1.5 bg-white/30"
+                    }`}
+                  />
+                ))}
+              </div>
             </div>
           </div>
 
