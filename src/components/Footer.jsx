@@ -1,8 +1,12 @@
 // src/components/Footer.jsx
 import { Link } from "react-router-dom";
-import { FiPhone } from "react-icons/fi";
+import { FiPhone, FiMapPin } from "react-icons/fi";
 import { FaInstagram, FaTiktok } from "react-icons/fa";
 import logo from "../assets/logo.png";
+
+const SHOP_LAT = -1.1924826;
+const SHOP_LNG = 36.8987077;
+const MAPS_LINK = `https://www.google.com/maps/search/?api=1&query=${SHOP_LAT},${SHOP_LNG}`;
 
 const quickLinks = [
   { label: "Home", to: "/" },
@@ -90,10 +94,20 @@ function Footer() {
 
             <a
               href="tel:+254705250810"
-              className="flex items-center gap-3 text-gray-300 hover:text-gold transition-colors mb-6"
+              className="flex items-center gap-3 text-gray-300 hover:text-gold transition-colors mb-4"
             >
               <FiPhone className="text-lg shrink-0" />
               <span>0705 250 810</span>
+            </a>
+
+            <a
+              href={MAPS_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 text-gray-300 hover:text-gold transition-colors mb-6"
+            >
+              <FiMapPin className="text-lg shrink-0" />
+              <span>JBC Mall, Kamiti Rd</span>
             </a>
 
             <div className="flex items-center gap-5 text-xl">
