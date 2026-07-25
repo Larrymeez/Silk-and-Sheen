@@ -1,5 +1,4 @@
 import { useRef } from "react";
-import logo from "./assets/logo.png";
 import Navbar from "./components/navbar";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Bundles from "./pages/Bundles";
@@ -21,12 +20,15 @@ import OrderPage from "./pages/OrderPage";
 import QuickShopCarousel from "./components/QuickShopCarousel";
 
 function Home() {
+  const quickShopRef = useRef(null);
   const collectionsRef = useRef(null);
 
+  const scrollToQuickShop = () => {
+    quickShopRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   const scrollToCollections = () => {
-    collectionsRef.current?.scrollIntoView({
-      behavior: "smooth",
-    });
+    collectionsRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
@@ -37,7 +39,7 @@ function Home() {
       transition={{ duration: 0.6 }}
     >
       {/* HERO SECTION */}
-      <section className="relative w-full min-h-[680px] sm:min-h-[720px] lg:min-h-[760px] flex items-center overflow-hidden">
+      <section className="relative w-full min-h-[680px] sm:min-h-[720px] lg:min-h-[780px] flex items-center overflow-hidden">
 
         {/* Background Image */}
         <motion.img
@@ -54,14 +56,9 @@ function Home() {
           }}
         />
 
-        {/* Overall darkening */}
-        <div className="absolute inset-0 bg-black/25" />
-
-        {/* Text-focused gradient */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/35 to-transparent" />
-
-        {/* Mobile-friendly bottom gradient */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent lg:hidden" />
+        {/* Darkening + gradient */}
+        <div className="absolute inset-0 bg-black/30" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/10" />
 
         {/* HERO CONTENT */}
         <motion.div
@@ -73,194 +70,107 @@ function Home() {
             px-6
             sm:px-10
             md:px-16
-            lg:px-20
-            pt-24
-            pb-20
+            lg:px-24
+            py-16
+            sm:py-20
           "
-          initial={{ opacity: 0, x: -40 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{
-            duration: 1,
-            ease: [0.25, 0.8, 0.25, 1],
-          }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, ease: [0.25, 0.8, 0.25, 1] }}
         >
           <div className="max-w-xl text-center md:text-left">
 
-            {/* Logo */}
-            <motion.img
-              src={logo}
-              alt="Silk & Sheen Logo"
-              className="
-                w-36
-                sm:w-40
-                md:w-48
-                lg:w-52
-                mx-auto
-                md:mx-0
-                mb-6
-                object-contain
-              "
-              initial={{ opacity: 0, scale: 0.92 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{
-                duration: 0.9,
-                delay: 0.2,
-              }}
-              style={{
-                filter: "drop-shadow(0 4px 12px rgba(0,0,0,0.65))",
-              }}
-            />
-
-            {/* Brand Name */}
-            <h1
-              className="
-                text-4xl
-                sm:text-5xl
-                md:text-6xl
-                lg:text-7xl
-                font-calligraphy
-                italic
-                text-white
-                tracking-wide
-                leading-tight
-              "
-              style={{
-                textShadow: "0 4px 14px rgba(0,0,0,0.7)",
-              }}
+            
+            {/* EYEBROW */}
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="text-gold text-xs sm:text-sm uppercase tracking-[0.25em] mb-5"
             >
-              SILK & SHEEN
-            </h1>
+              Quality hair · Effortless style · Made for you
+            </motion.p>
+
+            {/* WORDMARK with one-time shimmer sweep */}
+            <div className="relative overflow-hidden inline-block">
+              <h1
+                className="
+                  text-4xl sm:text-5xl md:text-6xl lg:text-7xl
+                  font-calligraphy italic text-white tracking-wide leading-tight
+                "
+                style={{ textShadow: "0 4px 14px rgba(0,0,0,0.7)" }}
+              >
+                Silk &amp; Sheen
+              </h1>
+
+              <motion.span
+                aria-hidden="true"
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background:
+                    "linear-gradient(100deg, transparent 30%, rgba(255,255,255,0.55) 45%, transparent 60%)",
+                  mixBlendMode: "overlay",
+                }}
+                initial={{ x: "-120%" }}
+                animate={{ x: "120%" }}
+                transition={{ duration: 1.4, delay: 1.1, ease: "easeInOut" }}
+              />
+            </div>
 
             {/* Tagline */}
             <motion.p
-              className="
-                mt-4
-                text-2xl
-                sm:text-3xl
-                md:text-4xl
-                font-calligraphy
-                italic
-                text-white
-              "
+              className="mt-4 text-xl sm:text-2xl md:text-3xl font-calligraphy italic text-gold"
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.8,
-                delay: 0.5,
-              }}
-              style={{
-                textShadow: "0 4px 12px rgba(0,0,0,0.7)",
-              }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+              style={{ textShadow: "0 4px 12px rgba(0,0,0,0.7)" }}
             >
               Confidence in every strand.
             </motion.p>
 
             {/* Description */}
             <motion.p
-              className="
-                mt-6
-                text-base
-                sm:text-lg
-                md:text-xl
-                leading-relaxed
-                text-gray-100
-                max-w-lg
-              "
+              className="mt-5 text-base sm:text-lg leading-relaxed text-gray-200 max-w-md"
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.8,
-                delay: 0.7,
-              }}
-              style={{
-                textShadow: "0 2px 8px rgba(0,0,0,0.7)",
-              }}
+              transition={{ duration: 0.8, delay: 0.7 }}
+              style={{ textShadow: "0 2px 8px rgba(0,0,0,0.7)" }}
             >
-              Premium hair, wigs and extensions designed for effortless beauty
-              — whether you're dressing up or simply feeling like yourself.
+              Premium hair, wigs and extensions for effortless beauty —
+              however you wear your confidence.
             </motion.p>
 
-            {/* Trust Line */}
-            <motion.p
-              className="
-                mt-5
-                text-xs
-                sm:text-sm
-                uppercase
-                tracking-[0.2em]
-                text-gray-200
-              "
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{
-                duration: 0.8,
-                delay: 0.9,
-              }}
-            >
-              Quality hair • Effortless style • Made for you
-            </motion.p>
-
-            {/* Buttons */}
+            {/* BUTTONS */}
             <motion.div
-              className="
-                flex
-                flex-col
-                sm:flex-row
-                items-center
-                md:items-start
-                gap-4
-                mt-8
-              "
+              className="flex flex-col sm:flex-row items-center md:items-start gap-4 sm:gap-8 mt-9"
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.8,
-                delay: 1,
-              }}
+              transition={{ duration: 0.8, delay: 0.95 }}
             >
               <button
-                onClick={scrollToCollections}
+                onClick={scrollToQuickShop}
                 className="
-                  w-full
-                  sm:w-auto
-                  bg-gold
-                  text-white
-                  px-8
-                  py-3.5
+                  w-full sm:w-auto
+                  bg-gold text-white
+                  px-8 py-3.5
                   rounded-md
-                  text-base
-                  sm:text-lg
-                  font-medium
-                  transition
-                  duration-300
-                  hover:bg-yellow-600
-                  hover:-translate-y-0.5
+                  text-base sm:text-lg font-medium
+                  transition duration-300
+                  hover:bg-yellow-600 hover:-translate-y-0.5
                 "
               >
-                Shop Collection
+                Shop Now
               </button>
 
               <button
                 onClick={scrollToCollections}
-                className="
-                  w-full
-                  sm:w-auto
-                  border
-                  border-white/80
-                  text-white
-                  px-8
-                  py-3.5
-                  rounded-md
-                  text-base
-                  sm:text-lg
-                  font-medium
-                  transition
-                  duration-300
-                  hover:bg-white
-                  hover:text-black
-                "
+                className="group relative w-full sm:w-auto text-white text-base sm:text-lg font-medium tracking-wide"
               >
-                Explore Our Styles
+                Explore Collections
+                <span className="ml-2 inline-block transition-transform duration-300 group-hover:translate-x-1">
+                  →
+                </span>
+                <span className="absolute -bottom-1 left-0 h-px w-0 bg-gold transition-all duration-300 group-hover:w-full" />
               </button>
             </motion.div>
 
@@ -268,17 +178,15 @@ function Home() {
         </motion.div>
       </section>
 
-      {/* COLLECTIONS */}
-      <div
-        ref={collectionsRef}
-        className="w-full bg-brandbg"
-      >
+      {/* QUICK SHOP */}
+      <div ref={quickShopRef} className="w-full bg-brandbg">
         <QuickShopCarousel />
-        
+      </div>
+
+      {/* COLLECTIONS */}
+      <div ref={collectionsRef} className="w-full bg-brandbg">
         <CollectionsSection />
-
         <HowItWorksSection />
-
         <Footer />
       </div>
     </motion.div>
@@ -289,52 +197,23 @@ function App() {
   return (
     <CartProvider>
       <Router>
-
         <Navbar />
 
         <Routes>
           <Route path="/" element={<Home />} />
-
           <Route path="/bundles" element={<Bundles />} />
-
-          <Route
-            path="/frontals-closures"
-            element={<FrontalsClosures />}
-          />
-
-          <Route
-            path="/glueless-wigs"
-            element={<GluelessWigs />}
-          />
-
-          <Route
-            path="/part-wigs"
-            element={<PartWigs />}
-          />
-
-          <Route
-            path="/clip-ins"
-            element={<ClipIns />}
-          />
-
-          <Route
-            path="/braiding-hair"
-            element={<BraidingHair />}
-          />
-
-          <Route
-            path="/clip-ins/:id"
-            element={<ProductPage />}
-          />
-
+          <Route path="/frontals-closures" element={<FrontalsClosures />} />
+          <Route path="/glueless-wigs" element={<GluelessWigs />} />
+          <Route path="/part-wigs" element={<PartWigs />} />
+          <Route path="/clip-ins" element={<ClipIns />} />
+          <Route path="/braiding-hair" element={<BraidingHair />} />
+          <Route path="/clip-ins/:id" element={<ProductPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/order" element={<OrderPage />} />
           <Route path="/product/:id" element={<ProductPage />} />
-          
         </Routes>
 
         <SideDrawerCart />
-
       </Router>
     </CartProvider>
   );
