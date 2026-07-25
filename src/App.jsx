@@ -18,6 +18,7 @@ import { CartProvider } from "./context/CartContext.jsx";
 import SideDrawerCart from "./components/SideDrawerCart";
 import CartPage from "./pages/CartPage.jsx";
 import OrderPage from "./pages/OrderPage";
+import QuickShopCarousel from "./components/QuickShopCarousel";
 
 function Home() {
   const collectionsRef = useRef(null);
@@ -272,6 +273,8 @@ function Home() {
         ref={collectionsRef}
         className="w-full bg-brandbg"
       >
+        <QuickShopCarousel />
+        
         <CollectionsSection />
 
         <HowItWorksSection />
