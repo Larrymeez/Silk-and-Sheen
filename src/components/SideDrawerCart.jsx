@@ -29,11 +29,7 @@ export default function SideDrawerCart() {
   };
 
   const getItemPrice = (item) => {
-    return (
-      item.basePrice +
-      (item.inches - item.startingLength) *
-        item.pricePerExtraInch
-    );
+    return item.pricing?.[item.inches] ?? 0;
   };
 
   // Navigate to the full cart page

@@ -1,5 +1,4 @@
 // src/components/Navbar.jsx
-// src/components/Navbar.jsx
 import { useEffect, useState, useContext, useRef } from "react";
 import logo from "../assets/logo.png";
 import { FiSearch, FiShoppingCart, FiUser, FiX, FiMenu, FiChevronDown } from "react-icons/fi";
@@ -27,7 +26,6 @@ function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close desktop search dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (searchRef.current && !searchRef.current.contains(e.target)) {
@@ -38,7 +36,6 @@ function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Lock body scroll when mobile menu or mobile search is open
   useEffect(() => {
     document.body.style.overflow = mobileMenuOpen || searchOpen ? "hidden" : "";
     return () => {
@@ -163,7 +160,9 @@ function Navbar() {
                             <img src={product.image} alt={product.name} className="w-12 h-12 object-cover rounded-md flex-shrink-0" />
                             <div className="min-w-0">
                               <p className="text-sm font-medium truncate">{product.name}</p>
-                              <p className="text-xs text-gray-500">KSh {product.basePrice?.toLocaleString()}</p>
+                              <p className="text-xs text-gray-500">
+                                KSh {product.pricing?.[product.startingLength]?.toLocaleString()}
+                              </p>
                             </div>
                           </button>
                         ))
@@ -286,7 +285,9 @@ function Navbar() {
                     <img src={product.image} alt={product.name} className="w-14 h-14 object-cover rounded-md flex-shrink-0" />
                     <div className="min-w-0">
                       <p className="text-sm font-medium truncate">{product.name}</p>
-                      <p className="text-xs text-gray-500">KSh {product.basePrice?.toLocaleString()}</p>
+                      <p className="text-xs text-gray-500">
+                        KSh {product.pricing?.[product.startingLength]?.toLocaleString()}
+                      </p>
                     </div>
                   </button>
                 ))

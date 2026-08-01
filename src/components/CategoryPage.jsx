@@ -4,178 +4,165 @@ import { useNavigate } from "react-router-dom";
 import { products } from "../data/products";
 import Footer from "./Footer";
 
-const containerVariants = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.12 } },
-};
-
-const fadeLeftVariants = {
-  hidden: { opacity: 0, x: -40 },
-  show: { opacity: 1, x: 0, transition: { duration: 0.8, ease: [0.25, 0.8, 0.25, 1] } },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 35 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.65, ease: [0.25, 0.8, 0.25, 1] } },
-};
+const OFFSETS = [0, 22, 8, 30, 12];
 
 function CategoryPage({ category }) {
   const navigate = useNavigate();
   const categoryProducts = products.filter((p) => p.category === category.slug);
 
   return (
-    <motion.main
-      className="min-h-screen bg-brandbg text-white pt-28 pb-20 px-5 sm:px-8 lg:px-12"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.7 }}
-    >
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[0.8fr_1.8fr] gap-12 lg:gap-16 items-start">
+    <main className="min-h-screen bg-brandbg text-white">
 
-        {/* LEFT — INTRO */}
-        <motion.section
-          variants={fadeLeftVariants}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, amount: 0.2 }}
-          className="lg:sticky lg:top-32 self-start"
+      {/* CINEMATIC HERO */}
+      <section className="relative w-full h-[65vh] sm:h-[72vh] lg:h-[80vh] overflow-hidden">
+        <motion.img
+          src={category.image}
+          alt={category.label}
+          className="absolute inset-0 w-full h-full object-cover"
+          initial={{ scale: 1.08, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 1.2, ease: [0.25, 0.8, 0.25, 1] }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/30" />
+
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, delay: 0.3 }}
+          className="absolute bottom-24 sm:bottom-28 left-6 sm:left-10 lg:left-16 font-calligraphy italic text-4xl sm:text-6xl lg:text-7xl text-white"
+          style={{ textShadow: "0 4px 16px rgba(0,0,0,0.6)" }}
         >
-          <p className="text-gold text-xs sm:text-sm uppercase tracking-[0.25em] mb-5">
-            The {category.label} Collection
-          </p>
+          {category.label}
+        </motion.h1>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold leading-tight tracking-tight">
-            Silk & Sheen
-            <span className="block text-gold">{category.label}</span>
-          </h1>
-
-          <p className="mt-6 font-calligraphy italic text-2xl sm:text-3xl text-white leading-relaxed">
-            {category.tagline}
-          </p>
-
-          <p className="mt-7 text-gray-300 text-base sm:text-lg leading-relaxed max-w-xl">
-            {category.description}
-          </p>
-        </motion.section>
-
-        {/* RIGHT */}
-        <section className="flex flex-col gap-10">
-
-          {/* HERO IMAGE */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.8, ease: [0.25, 0.8, 0.25, 1] }}
-            className="relative h-[280px] sm:h-[380px] lg:h-[460px] rounded-2xl overflow-hidden shadow-2xl"
-          >
-            <motion.img
-              src={category.image}
-              alt={`Silk & Sheen ${category.label}`}
-              className="absolute inset-0 w-full h-full object-cover"
-              animate={{ scale: [1, 1.035, 1] }}
-              transition={{ duration: 24, repeat: Infinity, ease: "easeInOut" }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
-          </motion.div>
-
-          {/* PRODUCTS HEADER */}
-          <motion.div
-            variants={fadeLeftVariants}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, amount: 0.2 }}
-            className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3"
-          >
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+          className="
+            absolute -bottom-1 left-6 sm:left-10 lg:left-16
+            translate-y-1/2
+            bg-brandbg/95 backdrop-blur-sm
+            border border-gold/40
+            px-6 py-5 sm:px-8 sm:py-6
+            w-[calc(100%-3rem)] sm:w-auto sm:min-w-[320px]
+          "
+        >
+          <div className="flex items-center justify-between gap-8 sm:gap-12">
             <div>
-              <p className="text-xs uppercase tracking-[0.2em] text-gray-400 mb-2">
-                Explore the collection
-              </p>
-              <h2 className="text-2xl sm:text-3xl font-semibold">Find your perfect fit</h2>
+              <p className="text-[10px] uppercase tracking-[0.25em] text-gray-500 mb-1">Texture</p>
+              <p className="text-sm sm:text-base text-white font-medium">{category.label}</p>
             </div>
-
-            {categoryProducts.length > 0 && (
-              <p className="text-sm text-gray-400">
-                {categoryProducts.length} styles available
+            <div>
+              <p className="text-[10px] uppercase tracking-[0.25em] text-gray-500 mb-1">Material</p>
+              <p className="text-sm sm:text-base text-white font-medium">
+                {category.material || "100% Human Hair"}
               </p>
-            )}
-          </motion.div>
+            </div>
+            <div>
+              <p className="text-[10px] uppercase tracking-[0.25em] text-gray-500 mb-1">In Stock</p>
+              <p className="text-sm sm:text-base text-gold font-medium">
+                {categoryProducts.length || "—"}
+              </p>
+            </div>
+          </div>
+        </motion.div>
+      </section>
 
-          {/* PRODUCT GRID or EMPTY STATE */}
-          {categoryProducts.length > 0 ? (
-            <motion.div
-              className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 sm:gap-6"
-              variants={containerVariants}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, amount: 0.1 }}
-            >
-              {categoryProducts.map((product) => (
+      {/* INTRO ROW */}
+      <section className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 pt-24 sm:pt-28 pb-16 sm:pb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-8 lg:gap-16">
+          <motion.p
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.4 }}
+            transition={{ duration: 0.7 }}
+            className="font-calligraphy italic text-2xl sm:text-3xl lg:text-4xl text-gold leading-snug"
+          >
+            {category.tagline}
+          </motion.p>
+
+          <motion.p
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.4 }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="text-gray-400 text-base sm:text-lg leading-relaxed self-end"
+          >
+            {category.description}
+          </motion.p>
+        </div>
+      </section>
+
+      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
+        <div className="w-full h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent mb-16 sm:mb-20" />
+      </div>
+
+      {/* PRODUCTS */}
+      <section className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 pb-24 sm:pb-28">
+        {categoryProducts.length > 0 ? (
+          <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-x-5 sm:gap-x-8 gap-y-10 sm:gap-y-14">
+            {categoryProducts.map((product, index) => {
+              const offset = OFFSETS[index % OFFSETS.length];
+              return (
                 <motion.article
                   key={product.id}
-                  variants={cardVariants}
                   onClick={() => navigate(`/product/${product.id}`)}
-                  className="group cursor-pointer overflow-hidden rounded-xl bg-white text-black shadow-lg transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl"
+                  initial={{ opacity: 0, y: offset + 24 }}
+                  whileInView={{ opacity: 1, y: offset }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ duration: 0.6, delay: (index % 4) * 0.06, ease: [0.25, 0.8, 0.25, 1] }}
+                  className="group cursor-pointer"
                 >
-                  <div className="relative aspect-[4/5] overflow-hidden bg-gray-100">
-                    <motion.img
+                  <div className="relative aspect-[3/4] overflow-hidden rounded-sm bg-gray-900">
+                    <img
                       src={product.image}
                       alt={product.name}
-                      className="w-full h-full object-cover"
-                      whileHover={{ scale: 1.05 }}
-                      transition={{ duration: 0.6, ease: "easeOut" }}
+                      className="
+                        w-full h-full object-cover
+                        grayscale-[35%] group-hover:grayscale-0
+                        scale-100 group-hover:scale-[1.04]
+                        transition-all duration-700 ease-out
+                      "
                     />
-                    <div className="absolute bottom-3 left-3 right-3 rounded-md bg-black/70 px-3 py-2 text-center text-xs tracking-wide text-white opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">
-                      View Product
-                    </div>
                   </div>
 
-                  <div className="flex items-center justify-between gap-3 px-4 py-4">
-                    <div>
-                      <h3 className="font-medium text-sm sm:text-base">{product.name}</h3>
-                      <p className="mt-1 text-sm text-gray-600">
-                        KSh {product.basePrice?.toLocaleString()}
+                  <div className="mt-3 sm:mt-4">
+                    <h3 className="text-xs sm:text-sm text-white font-medium tracking-wide truncate">
+                      {product.name}
+                    </h3>
+                    <div className="relative inline-block mt-1">
+                      <p className="text-xs sm:text-sm text-gray-400">
+                        KSh {product.pricing?.[product.startingLength]?.toLocaleString()}
                       </p>
+                      <span className="absolute -bottom-1 left-0 h-px w-0 bg-gold transition-all duration-300 group-hover:w-full" />
                     </div>
-
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        navigate(`/product/${product.id}`);
-                      }}
-                      className="shrink-0 rounded-full border border-black px-4 py-2 text-xs transition-all duration-300 hover:bg-black hover:text-white"
-                    >
-                      Select
-                    </button>
                   </div>
                 </motion.article>
-              ))}
-            </motion.div>
-          ) : (
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="rounded-2xl border border-white/10 py-16 px-6 text-center"
-            >
-              <p className="font-calligraphy italic text-2xl text-gold mb-3">
-                New arrivals coming soon
-              </p>
-              <p className="text-gray-400 max-w-sm mx-auto">
-                We're restocking this collection. Check back shortly, or reach out
-                and we'll let you know the moment it's ready.
-              </p>
-            </motion.div>
-          )}
+              );
+            })}
+          </div>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="border-t border-b border-white/10 py-20 text-center"
+          >
+            <p className="font-calligraphy italic text-2xl sm:text-3xl text-gold mb-3">
+              This edit is being restocked
+            </p>
+            <p className="text-gray-400 max-w-sm mx-auto text-sm sm:text-base">
+              New {category.label.toLowerCase()} pieces are on their way. Check back soon,
+              or reach out and we'll notify you the moment they land.
+            </p>
+          </motion.div>
+        )}
+      </section>
 
-        </section>
-      </div>
-
-      <div className="max-w-7xl mx-auto mt-24">
-        <Footer />
-      </div>
-    </motion.main>
+      <Footer />
+    </main>
   );
 }
 

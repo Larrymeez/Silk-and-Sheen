@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { products } from "../data/products";
 
-// Uneven vertical rhythm — strands of varying "length"
 const OFFSETS = [0, 26, 8, 34, 14, 4];
 
 function QuickShopCarousel() {
@@ -40,7 +39,6 @@ function QuickShopCarousel() {
     <section className="w-full bg-brandbg pt-16 pb-24 sm:pt-20 sm:pb-28">
       <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
 
-        {/* Header row */}
         <div className="flex items-end justify-between gap-6 mb-10 sm:mb-12">
           <div>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-white tracking-tight">
@@ -51,7 +49,6 @@ function QuickShopCarousel() {
             </p>
           </div>
 
-          {/* Text-based prev/next, not icon buttons */}
           <div className="hidden sm:flex items-center gap-5 pb-1 shrink-0">
             <button
               onClick={() => nudge("left")}
@@ -83,7 +80,6 @@ function QuickShopCarousel() {
           </div>
         </div>
 
-        {/* Filament progress line — the thread being pulled through */}
         <div className="relative w-full h-px bg-white/15 mb-10 sm:mb-14">
           <span
             className="absolute left-0 top-0 h-px bg-gold transition-[width] duration-150 ease-out"
@@ -91,7 +87,6 @@ function QuickShopCarousel() {
           />
         </div>
 
-        {/* Scroll container */}
         <div
           ref={scrollRef}
           onScroll={handleScroll}
@@ -142,11 +137,11 @@ function QuickShopCarousel() {
                     {product.name}
                   </h3>
 
-                  <div className="relative inline-block mt-1">
-                    <p className="text-xs sm:text-sm text-gray-400">
-                      KSh {product.basePrice?.toLocaleString()}
-                    </p>
-                    <span className="absolute -bottom-1 left-0 h-px w-0 bg-gold transition-all duration-300 group-hover:w-full" />
+                  <div className="mt-1.5 flex items-center gap-1.5 text-[11px] sm:text-xs tracking-[0.15em] uppercase text-gray-500 group-hover:text-gold transition-colors duration-300">
+                    <span>Buy Now</span>
+                    <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">
+                      →
+                    </span>
                   </div>
                 </div>
               </motion.article>
@@ -158,6 +153,5 @@ function QuickShopCarousel() {
     </section>
   );
 }
-
 
 export default QuickShopCarousel;

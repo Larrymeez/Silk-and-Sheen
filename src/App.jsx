@@ -1,15 +1,12 @@
 import { useRef } from "react";
 import Navbar from "./components/navbar";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Bundles from "./pages/Bundles";
-import FrontalsClosures from "./pages/FrontalsClosures";
-import GluelessWigs from "./pages/GluelessWigs";
-import PartWigs from "./pages/PartWigs";
-import BraidingHair from "./pages/BraidingHair";
-import ClipIns from "./pages/ClipIns";
+import CategoryPage from "./components/CategoryPage";
+import { categories } from "./data/categories";
 import ProductPage from "./pages/ProductPage";
 import CollectionsSection from "./components/CollectionsSection";
 import HowItWorksSection from "./components/HowItWorksSection";
+import VisitUsSection from "./components/VisitUsSection";
 import Footer from "./components/Footer";
 import { motion } from "framer-motion";
 import hero1 from "./assets/hero1.jpg";
@@ -18,19 +15,13 @@ import SideDrawerCart from "./components/SideDrawerCart";
 import CartPage from "./pages/CartPage.jsx";
 import OrderPage from "./pages/OrderPage";
 import QuickShopCarousel from "./components/QuickShopCarousel";
-import VisitUsSection from "./components/VisitUsSection";
 
 function Home() {
   const quickShopRef = useRef(null);
   const collectionsRef = useRef(null);
 
-  const scrollToQuickShop = () => {
-    quickShopRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  const scrollToCollections = () => {
-    collectionsRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  const scrollToQuickShop = () => quickShopRef.current?.scrollIntoView({ behavior: "smooth" });
+  const scrollToCollections = () => collectionsRef.current?.scrollIntoView({ behavior: "smooth" });
 
   return (
     <motion.div
@@ -184,7 +175,6 @@ function Home() {
         <QuickShopCarousel />
       </div>
 
-      {/* COLLECTIONS */}
       <div ref={collectionsRef} className="w-full bg-brandbg">
         <CollectionsSection />
         <HowItWorksSection />
@@ -203,13 +193,15 @@ function App() {
 
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/bundles" element={<Bundles />} />
-          <Route path="/frontals-closures" element={<FrontalsClosures />} />
-          <Route path="/glueless-wigs" element={<GluelessWigs />} />
-          <Route path="/part-wigs" element={<PartWigs />} />
-          <Route path="/clip-ins" element={<ClipIns />} />
-          <Route path="/braiding-hair" element={<BraidingHair />} />
-          <Route path="/clip-ins/:id" element={<ProductPage />} />
+
+          {categories.map((cat) => (
+            <Route
+              key={cat.slug}
+              path={cat.path}
+              element={<CategoryPage category={cat} />}
+            />
+          ))}
+
           <Route path="/cart" element={<CartPage />} />
           <Route path="/order" element={<OrderPage />} />
           <Route path="/product/:id" element={<ProductPage />} />
