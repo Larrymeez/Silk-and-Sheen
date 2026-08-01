@@ -1,19 +1,12 @@
 // src/components/Navbar.jsx
+// src/components/Navbar.jsx
 import { useEffect, useState, useContext, useRef } from "react";
 import logo from "../assets/logo.png";
 import { FiSearch, FiShoppingCart, FiUser, FiX, FiMenu, FiChevronDown } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
 import { CartContext } from "../context/CartContext.jsx";
 import { products } from "../data/products";
-
-const collectionLinks = [
-  { to: "/bundles", label: "Bundles" },
-  { to: "/frontals-closures", label: "Frontals & Closures" },
-  { to: "/glueless-wigs", label: "Glueless Lace Wigs" },
-  { to: "/part-wigs", label: "Part Wigs" },
-  { to: "/clip-ins", label: "Clip-ins" },
-  { to: "/braiding-hair", label: "Braiding Hair" },
-];
+import { categories } from "../data/categories";
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -121,9 +114,9 @@ function Navbar() {
               <div className="absolute left-0 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-200">
                 <div className="bg-white text-black rounded-xl shadow-xl w-64 py-4">
                   <ul className="flex flex-col">
-                    {collectionLinks.map((link) => (
-                      <li key={link.to} className="px-6 py-2 hover:bg-gray-100">
-                        <Link to={link.to}>{link.label}</Link>
+                    {categories.map((link) => (
+                      <li key={link.path} className="px-6 py-2 hover:bg-gray-100">
+                        <Link to={link.path}>{link.label}</Link>
                       </li>
                     ))}
                   </ul>
@@ -245,9 +238,9 @@ function Navbar() {
 
               {mobileCollectionsOpen && (
                 <ul className="pb-3 pl-4 flex flex-col gap-1 text-base font-normal text-gray-300">
-                  {collectionLinks.map((link) => (
-                    <li key={link.to}>
-                      <Link to={link.to} onClick={closeMobileMenu} className="block py-2.5 hover:text-gold transition">
+                  {categories.map((link) => (
+                    <li key={link.path}>
+                      <Link to={link.path} onClick={closeMobileMenu} className="block py-2.5 hover:text-gold transition">
                         {link.label}
                       </Link>
                     </li>

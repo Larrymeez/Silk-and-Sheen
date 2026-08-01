@@ -2,22 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-
-import bundles1 from "../assets/bundles1.jpg";
-import frontal1 from "../assets/frontal1.jpg";
-import glueless1 from "../assets/glueless1.jpg";
-import part3 from "../assets/part3.jpg";
-import clipins3 from "../assets/clipins3.jpg";
-import braiding1 from "../assets/braiding1.jpg";
-
-const categories = [
-  { name: "Bundles", image: bundles1, path: "/bundles" },
-  { name: "Frontals & Closures", image: frontal1, path: "/frontals-closures" },
-  { name: "Glueless Lace Wigs", image: glueless1, path: "/glueless-wigs" },
-  { name: "Part Wigs", image: part3, path: "/part-wigs" },
-  { name: "Clip-ins", image: clipins3, path: "/clip-ins" },
-  { name: "Braiding Hair", image: braiding1, path: "/braiding-hair" },
-];
+import { categories } from "../data/categories";
 
 const AUTO_ADVANCE_MS = 4000;
 
@@ -67,7 +52,7 @@ function CollectionsSection() {
           {/* LEFT: LIST */}
           <ul className="divide-y divide-white/10 border-t border-white/10 lg:border-t-0">
             {categories.map((category, index) => (
-              <li key={category.name}>
+              <li key={category.slug}>
                 <Link
                   to={category.path}
                   onMouseEnter={() => {
@@ -97,7 +82,7 @@ function CollectionsSection() {
                         ${index === activeIndex ? "text-white" : "text-gray-400 group-hover:text-white"}
                       `}
                     >
-                      {category.name}
+                      {category.label}
                     </span>
                   </div>
 
@@ -127,9 +112,9 @@ function CollectionsSection() {
             <div className="relative aspect-[4/5] max-h-[70vh] rounded-sm overflow-hidden bg-gray-900 mx-auto">
               <AnimatePresence mode="wait">
                 <motion.img
-                  key={active.name}
+                  key={active.slug}
                   src={active.image}
-                  alt={active.name}
+                  alt={active.label}
                   initial={{ opacity: 0, scale: 1.04 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0 }}
@@ -141,14 +126,14 @@ function CollectionsSection() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
 
               <p className="absolute bottom-6 left-6 font-calligraphy italic text-2xl text-gold">
-                {active.name}
+                {active.label}
               </p>
 
               {/* Progress dots */}
               <div className="absolute top-6 right-6 flex gap-1.5">
                 {categories.map((cat, i) => (
                   <span
-                    key={cat.name}
+                    key={cat.slug}
                     className={`h-1 rounded-full transition-all duration-500 ${
                       i === activeIndex ? "w-6 bg-gold" : "w-1.5 bg-white/30"
                     }`}
